@@ -1,5 +1,6 @@
 use std::process::exit;
 mod uri_identifier;
+mod vless;
 
 pub fn parse(uri: &str) {
     let protocol = uri_identifier::get_uri_protocol(uri);
