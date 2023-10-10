@@ -100,4 +100,17 @@ mod tests {
         assert_eq!(parsed_query.r#flow, "xtls-rprx-vision");
         assert_eq!(parsed_query.path, "/");
     }
+    #[test]
+    fn parse_vless_query_with_defaults() {
+        let query = "";
+        let parsed_query = get_vless_query_data(query);
+        assert_eq!(parsed_query.sni, "");
+        assert_eq!(parsed_query.security, "");
+        assert_eq!(parsed_query.fp, "");
+        assert_eq!(parsed_query.pbk, "");
+        assert_eq!(parsed_query.sid, "");
+        assert_eq!(parsed_query.r#type, "");
+        assert_eq!(parsed_query.r#flow, "");
+        assert_eq!(parsed_query.path, "");
+    }
 }
