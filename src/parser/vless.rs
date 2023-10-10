@@ -1,7 +1,7 @@
 use querystring;
 
 #[derive(PartialEq, Eq)]
-pub struct Vless_Query {
+pub struct VlessQuery {
     security: String,
     sni: String,
     fp: String,
@@ -20,9 +20,9 @@ pub fn get_vless_data(uri: &str) {
     }
 }
 
-pub fn get_vless_query_data(raw_query: &str) -> Vless_Query {
+pub fn get_vless_query_data(raw_query: &str) -> VlessQuery {
     let query = querystring::querify(raw_query);
-    let a = Vless_Query {
+    let a = VlessQuery {
         pbk: query
             .iter()
             .find(|q| String::from(q.0) == String::from("pbk"))
