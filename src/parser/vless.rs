@@ -46,7 +46,7 @@ pub fn parse_vless_uui_and_host(raw_data: &str) -> VlessUUIDAndHost {
         }
         Some(data) => (
             String::from(data.0),
-            data.1.parse::<u16>().expect("Port is not a number"),
+            data.1.parse::<u16>().expect("Wrong vless format, port is not a number"),
         ),
     };
     return VlessUUIDAndHost { uuid, host, port };
