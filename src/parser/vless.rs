@@ -1,3 +1,5 @@
+use std::process::exit;
+
 use querystring;
 
 #[derive(PartialEq, Eq)]
@@ -12,6 +14,12 @@ pub struct VlessQuery {
     path: String,
 }
 
+pub struct VlessUUIDAndHost {
+    uuid: String,
+    host: String,
+    port: u16,
+}
+
 pub fn get_vless_data(uri: &str) {
     let data = uri.split_once("vless://").unwrap().1;
     let query_and_name = uri.split_once("?").unwrap().1;
@@ -21,6 +29,27 @@ pub fn get_vless_data(uri: &str) {
         .0;
     let parsed_query = parse_vless_query_data(query);
     println!("{0}", parsed_query.flow);
+}
+
+pub fn parse_vless_uui_and_host(raw_data: &str) -> VlessUUIDAndHost {
+    let (uuid, address): (String, &str) = match raw_data.split_once("@") {
+        None => {
+            println!("Wrong vless format, no `@` in the authentication");
+            exit(0);
+        }
+        Some(data) => (String::from(data.0), data.1),
+    };
+    let (host, port): (String, u16) = match address.split_once(":") {
+        None => {
+            println!("Wrong vless format, no `:` found in the address");
+            exit(0);
+        }
+        Some(data) => (
+            String::from(data.0),
+            data.1.parse::<u16>().expect("Port is not a number"),
+        ),
+    };
+    return VlessUUIDAndHost { uuid, host, port };
 }
 
 pub fn parse_vless_query_data(raw_query: &str) -> VlessQuery {
@@ -114,5 +143,13 @@ mod tests {
         assert_eq!(parsed_query.r#type, "");
         assert_eq!(parsed_query.r#flow, "");
         assert_eq!(parsed_query.path, "");
+    }
+    #[test]
+    fn parse_vless_host() {
+        let raw_host = "uu0id@127.0.0.1:3012";
+        let parsed = parse_vless_uui_and_host(raw_host);
+        assert_eq!(parsed.host, "127.0.0.1");
+        assert_eq!(parsed.port, 3012);
+        assert_eq!(parsed.uuid, "uu0id");
     }
 }
