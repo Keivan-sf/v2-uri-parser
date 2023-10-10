@@ -9,6 +9,7 @@ pub struct VlessQuery {
     sid: String,
     r#type: String,
     flow: String,
+    path: String,
 }
 
 pub fn get_vless_data(uri: &str) {
@@ -23,6 +24,12 @@ pub fn get_vless_data(uri: &str) {
 pub fn get_vless_query_data(raw_query: &str) -> VlessQuery {
     let query = querystring::querify(raw_query);
     let a = VlessQuery {
+        path: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("path"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
         pbk: query
             .iter()
             .find(|q| String::from(q.0) == String::from("pbk"))
@@ -79,7 +86,7 @@ mod tests {
     }
     #[test]
     fn parse_vless_query() {
-        let query = "security=reality&sni=bench.sh&fp=chrome&pbk=7xhH4b_VkliBxGulljcyPOH-bYUA2dl-XAdZAsfhk04&sid=6ba85179e30d4fc2&type=tcp&flow=xtls-rprx-vision";
+        let query = "security=reality&sni=bench.sh&fp=chrome&pbk=7xhH4b_VkliBxGulljcyPOH-bYUA2dl-XAdZAsfhk04&sid=6ba85179e30d4fc2&type=tcp&flow=xtls-rprx-vision&path=/";
         let parsed_query = get_vless_query_data(query);
         assert_eq!(parsed_query.sni, "bench.sh");
         assert_eq!(parsed_query.security, "reality");
@@ -91,5 +98,6 @@ mod tests {
         assert_eq!(parsed_query.sid, "6ba85179e30d4fc2");
         assert_eq!(parsed_query.r#type, "tcp");
         assert_eq!(parsed_query.r#flow, "xtls-rprx-vision");
+        assert_eq!(parsed_query.path, "/");
     }
 }
