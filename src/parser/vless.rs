@@ -2,8 +2,7 @@ use std::process::exit;
 
 use querystring;
 
-#[derive(PartialEq, Eq)]
-pub struct VlessQuery {
+struct VlessQuery {
     security: String,
     sni: String,
     fp: String,
@@ -24,13 +23,18 @@ pub struct VlessQuery {
     spx: String,
 }
 
-pub struct VlessAddress {
+struct VlessAddress {
     uuid: String,
     address: String,
     port: u16,
 }
 
-pub fn get_vless_data(uri: &str) {
+pub struct VlessData {
+    query: VlessQuery,
+    address_data: VlessAddress,
+}
+
+pub fn get_vless_data(uri: &str) -> VlessData {
     let data = uri.split_once("vless://").unwrap().1;
     let query_and_name = uri.split_once("?").unwrap().1;
     let query = query_and_name
@@ -38,10 +42,14 @@ pub fn get_vless_data(uri: &str) {
         .unwrap_or((query_and_name, ""))
         .0;
     let parsed_query = parse_vless_query(query);
-    println!("{0}", parsed_query.flow);
+    let parsed_address = parse_vless_address(data.split_once("?").unwrap().0);
+    return VlessData {
+        query: parsed_query,
+        address_data: parsed_address,
+    };
 }
 
-pub fn parse_vless_address(raw_data: &str) -> VlessAddress {
+fn parse_vless_address(raw_data: &str) -> VlessAddress {
     let (uuid, raw_address): (String, &str) = match raw_data.split_once("@") {
         None => {
             println!("Wrong vless format, no `@` found in the address");
@@ -68,7 +76,7 @@ pub fn parse_vless_address(raw_data: &str) -> VlessAddress {
     };
 }
 
-pub fn parse_vless_query(raw_query: &str) -> VlessQuery {
+fn parse_vless_query(raw_query: &str) -> VlessQuery {
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     let a = VlessQuery {
@@ -108,9 +116,19 @@ mod tests {
     use super::*;
     #[test]
     fn vless_test() {
-        let v = "vless://4d2c3e35-749d-52e3-bdb6-3f3f4950c183@tre.test.one:2053?security=reality&sni=bench.sh&fp=chrome&pbk=7xhH4b_VkliBxGulljcyPOH-bYUA2dl-XAdZAsfhk04&sid=6ba85179e30d4fc2&type=tcp&flow=xtls-rprx-vision#test-name";
-        get_vless_data(v);
+        let v = "vless://4d2c3e35-749d-52e3-bdb6-3f3f4950c183@tre.test.one:2053?security=reality&type=tcp&flow=xtls-rprx-vision#test-name";
+        let data = get_vless_data(v);
+        assert_eq!(data.address_data.address, "tre.test.one");
+        assert_eq!(
+            data.address_data.uuid,
+            "4d2c3e35-749d-52e3-bdb6-3f3f4950c183"
+        );
+        assert_eq!(data.address_data.port, 2053);
+        assert_eq!(data.query.flow, "xtls-rprx-vision");
+        assert_eq!(data.query.security, "reality");
+        assert_eq!(data.query.r#type, "tcp");
     }
+
     #[test]
     fn parse_vless_query_data() {
         let query = "security=reality&sni=bench.sh&fp=chrome&pbk=7xhH4b_VkliBxGulljcyPOH-bYUA2dl-XAdZAsfhk04&sid=6ba85179e30d4fc2&type=tcp&flow=xtls-rprx-vision&path=/";
