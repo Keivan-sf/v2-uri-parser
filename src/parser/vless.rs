@@ -44,7 +44,7 @@ pub fn get_vless_data(uri: &str) {
 pub fn parse_vless_address(raw_data: &str) -> VlessAddress {
     let (uuid, raw_address): (String, &str) = match raw_data.split_once("@") {
         None => {
-            println!("Wrong vless format, no `@` in the authentication");
+            println!("Wrong vless format, no `@` found in the address");
             exit(0);
         }
         Some(data) => (String::from(data.0), data.1),
