@@ -12,6 +12,16 @@ pub struct VlessQuery {
     r#type: String,
     flow: String,
     path: String,
+    encryption: String,
+    header_type: String,
+    host: String,
+    seed: String,
+    quic_security: String,
+    r#key: String,
+    mode: String,
+    service_name: String,
+    slpn: String,
+    spx: String,
 }
 
 pub struct VlessUUIDAndHost {
@@ -46,7 +56,9 @@ pub fn parse_vless_uui_and_host(raw_data: &str) -> VlessUUIDAndHost {
         }
         Some(data) => (
             String::from(data.0),
-            data.1.parse::<u16>().expect("Wrong vless format, port is not a number"),
+            data.1
+                .parse::<u16>()
+                .expect("Wrong vless format, port is not a number"),
         ),
     };
     return VlessUUIDAndHost { uuid, host, port };
@@ -54,6 +66,7 @@ pub fn parse_vless_uui_and_host(raw_data: &str) -> VlessUUIDAndHost {
 
 pub fn parse_vless_query_data(raw_query: &str) -> VlessQuery {
     let query = querystring::querify(raw_query);
+
     let a = VlessQuery {
         path: query
             .iter()
@@ -103,6 +116,66 @@ pub fn parse_vless_query_data(raw_query: &str) -> VlessQuery {
             .unwrap_or(&("", ""))
             .1
             .to_string(),
+        encryption: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("encryption"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        header_type: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("headerType"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        host: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("host"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        seed: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("seed"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        quic_security: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("quicSecurity"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        key: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("key"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        mode: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("mode"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        service_name: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("serviceName"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        slpn: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("slpn"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
+        spx: query
+            .iter()
+            .find(|q| String::from(q.0) == String::from("spx"))
+            .unwrap_or(&("", ""))
+            .1
+            .to_string(),
     };
     return a;
 }
@@ -128,8 +201,18 @@ mod tests {
         );
         assert_eq!(parsed_query.sid, "6ba85179e30d4fc2");
         assert_eq!(parsed_query.r#type, "tcp");
-        assert_eq!(parsed_query.r#flow, "xtls-rprx-vision");
+        assert_eq!(parsed_query.flow, "xtls-rprx-vision");
         assert_eq!(parsed_query.path, "/");
+        assert_eq!(parsed_query.encryption, "");
+        assert_eq!(parsed_query.header_type, "");
+        assert_eq!(parsed_query.host, "");
+        assert_eq!(parsed_query.seed, "");
+        assert_eq!(parsed_query.quic_security, "");
+        assert_eq!(parsed_query.key, "");
+        assert_eq!(parsed_query.mode, "");
+        assert_eq!(parsed_query.service_name, "");
+        assert_eq!(parsed_query.slpn, "");
+        assert_eq!(parsed_query.spx, "");
     }
     #[test]
     fn parse_vless_query_with_defaults() {
@@ -143,6 +226,16 @@ mod tests {
         assert_eq!(parsed_query.r#type, "");
         assert_eq!(parsed_query.r#flow, "");
         assert_eq!(parsed_query.path, "");
+        assert_eq!(parsed_query.encryption, "");
+        assert_eq!(parsed_query.header_type, "");
+        assert_eq!(parsed_query.host, "");
+        assert_eq!(parsed_query.seed, "");
+        assert_eq!(parsed_query.quic_security, "");
+        assert_eq!(parsed_query.key, "");
+        assert_eq!(parsed_query.mode, "");
+        assert_eq!(parsed_query.service_name, "");
+        assert_eq!(parsed_query.slpn, "");
+        assert_eq!(parsed_query.spx, "");
     }
     #[test]
     fn parse_vless_host() {
