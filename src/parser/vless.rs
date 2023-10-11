@@ -24,9 +24,9 @@ pub struct VlessQuery {
     spx: String,
 }
 
-pub struct VlessUUIDAndHost {
+pub struct VlessAddress {
     uuid: String,
-    host: String,
+    address: String,
     port: u16,
 }
 
@@ -41,15 +41,15 @@ pub fn get_vless_data(uri: &str) {
     println!("{0}", parsed_query.flow);
 }
 
-pub fn parse_vless_uui_and_host(raw_data: &str) -> VlessUUIDAndHost {
-    let (uuid, address): (String, &str) = match raw_data.split_once("@") {
+pub fn parse_vless_address(raw_data: &str) -> VlessAddress {
+    let (uuid, raw_address): (String, &str) = match raw_data.split_once("@") {
         None => {
             println!("Wrong vless format, no `@` in the authentication");
             exit(0);
         }
         Some(data) => (String::from(data.0), data.1),
     };
-    let (host, port): (String, u16) = match address.split_once(":") {
+    let (address, port): (String, u16) = match raw_address.split_once(":") {
         None => {
             println!("Wrong vless format, no `:` found in the address");
             exit(0);
@@ -61,7 +61,11 @@ pub fn parse_vless_uui_and_host(raw_data: &str) -> VlessUUIDAndHost {
                 .expect("Wrong vless format, port is not a number"),
         ),
     };
-    return VlessUUIDAndHost { uuid, host, port };
+    return VlessAddress {
+        uuid,
+        address,
+        port,
+    };
 }
 
 pub fn parse_vless_query_data(raw_query: &str) -> VlessQuery {
@@ -240,8 +244,8 @@ mod tests {
     #[test]
     fn parse_vless_host() {
         let raw_host = "uu0id@127.0.0.1:3012";
-        let parsed = parse_vless_uui_and_host(raw_host);
-        assert_eq!(parsed.host, "127.0.0.1");
+        let parsed = parse_vless_address(raw_host);
+        assert_eq!(parsed.address, "127.0.0.1");
         assert_eq!(parsed.port, 3012);
         assert_eq!(parsed.uuid, "uu0id");
     }
