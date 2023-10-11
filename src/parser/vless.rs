@@ -69,119 +69,38 @@ pub fn parse_vless_address(raw_data: &str) -> VlessAddress {
 }
 
 pub fn parse_vless_query(raw_query: &str) -> VlessQuery {
-    let query = querystring::querify(raw_query);
+    let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     let a = VlessQuery {
-        path: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("path"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        pbk: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("pbk"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        security: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("security"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        sid: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("sid"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        flow: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("flow"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        sni: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("sni"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        fp: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("fp"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        r#type: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("type"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        encryption: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("encryption"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        header_type: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("headerType"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        host: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("host"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        seed: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("seed"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        quic_security: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("quicSecurity"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        key: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("key"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        mode: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("mode"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        service_name: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("serviceName"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        slpn: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("slpn"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
-        spx: query
-            .iter()
-            .find(|q| String::from(q.0) == String::from("spx"))
-            .unwrap_or(&("", ""))
-            .1
-            .to_string(),
+        path: get_parameter_value(&query, "path"),
+        pbk: get_parameter_value(&query, "pbk"),
+        security: get_parameter_value(&query, "security"),
+        sid: get_parameter_value(&query, "sid"),
+        flow: get_parameter_value(&query, "flow"),
+        sni: get_parameter_value(&query, "sni"),
+        fp: get_parameter_value(&query, "fp"),
+        r#type: get_parameter_value(&query, "type"),
+        encryption: get_parameter_value(&query, "encryption"),
+        header_type: get_parameter_value(&query, "headerType"),
+        host: get_parameter_value(&query, "host"),
+        seed: get_parameter_value(&query, "seed"),
+        quic_security: get_parameter_value(&query, "quicSecurity"),
+        key: get_parameter_value(&query, "key"),
+        mode: get_parameter_value(&query, "mode"),
+        service_name: get_parameter_value(&query, "serviceName"),
+        slpn: get_parameter_value(&query, "slpn"),
+        spx: get_parameter_value(&query, "spx"),
     };
     return a;
+}
+
+fn get_parameter_value(query: &Vec<(&str, &str)>, param: &str) -> String {
+    return query
+        .iter()
+        .find(|q| String::from(q.0) == String::from(param))
+        .unwrap_or(&("", ""))
+        .1
+        .to_string();
 }
 
 #[cfg(test)]
