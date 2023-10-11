@@ -37,7 +37,7 @@ pub fn get_vless_data(uri: &str) {
         .split_once("#")
         .unwrap_or((query_and_name, ""))
         .0;
-    let parsed_query = parse_vless_query_data(query);
+    let parsed_query = parse_vless_query(query);
     println!("{0}", parsed_query.flow);
 }
 
@@ -68,7 +68,7 @@ pub fn parse_vless_address(raw_data: &str) -> VlessAddress {
     };
 }
 
-pub fn parse_vless_query_data(raw_query: &str) -> VlessQuery {
+pub fn parse_vless_query(raw_query: &str) -> VlessQuery {
     let query = querystring::querify(raw_query);
 
     let a = VlessQuery {
@@ -193,9 +193,9 @@ mod tests {
         get_vless_data(v);
     }
     #[test]
-    fn parse_vless_query() {
+    fn parse_vless_query_data() {
         let query = "security=reality&sni=bench.sh&fp=chrome&pbk=7xhH4b_VkliBxGulljcyPOH-bYUA2dl-XAdZAsfhk04&sid=6ba85179e30d4fc2&type=tcp&flow=xtls-rprx-vision&path=/";
-        let parsed_query = parse_vless_query_data(query);
+        let parsed_query = parse_vless_query(query);
         assert_eq!(parsed_query.sni, "bench.sh");
         assert_eq!(parsed_query.security, "reality");
         assert_eq!(parsed_query.fp, "chrome");
@@ -221,7 +221,7 @@ mod tests {
     #[test]
     fn parse_vless_query_with_defaults() {
         let query = "";
-        let parsed_query = parse_vless_query_data(query);
+        let parsed_query = parse_vless_query(query);
         assert_eq!(parsed_query.sni, "");
         assert_eq!(parsed_query.security, "");
         assert_eq!(parsed_query.fp, "");
