@@ -34,6 +34,38 @@ pub struct VlessData {
     address_data: VlessAddress,
 }
 
+struct VlessUser {
+    id: String,
+    encryption: String,
+    flow: String,
+    level: u8,
+}
+
+struct VlessServerObject {
+    address: String,
+    port: u16,
+    users: Vec<VlessUser>,
+}
+
+pub struct VlessOutbound {
+    vnext: VlessServerObject,
+}
+
+pub fn create_outbound_object(data: VlessData) -> VlessOutbound {
+    return VlessOutbound {
+        vnext: VlessServerObject {
+            port: data.address_data.port,
+            address: data.address_data.address,
+            users: vec![VlessUser {
+                id: data.address_data.uuid,
+                flow: data.query.flow,
+                encryption: data.query.encryption,
+                level: 0,
+            }],
+        },
+    };
+}
+
 pub fn get_vless_data(uri: &str) -> VlessData {
     let data = uri.split_once("vless://").unwrap().1;
     let query_and_name = uri.split_once("?").unwrap().1;
