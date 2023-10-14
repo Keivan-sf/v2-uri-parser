@@ -53,17 +53,23 @@ struct VlessOutboundSettings {
     vnext: Vec<VlessServerObject>,
 }
 
-pub struct VlessOutbound {
-    settings: VlessOutboundSettings,
+enum OutboundSettings {
+    Vless(VlessOutboundSettings),
+}
+
+struct StreamSettings {}
+
+pub struct Outbound {
+    settings: OutboundSettings,
     protocol: String,
     tag: String,
 }
 
-fn create_outbound_object(data: VlessData) -> VlessOutbound {
-    return VlessOutbound {
+fn create_outbound_object(data: VlessData) -> Outbound {
+    return Outbound {
         protocol: String::from("vless"),
         tag: String::from("proxy"),
-        settings: VlessOutboundSettings {
+        settings: OutboundSettings::Vless(VlessOutboundSettings {
             vnext: vec![VlessServerObject {
                 port: data.address_data.port,
                 address: data.address_data.address,
@@ -74,7 +80,7 @@ fn create_outbound_object(data: VlessData) -> VlessOutbound {
                     level: 0,
                 }],
             }],
-        },
+        }),
     };
 }
 
