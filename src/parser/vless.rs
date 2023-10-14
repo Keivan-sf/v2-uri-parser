@@ -47,13 +47,13 @@ struct VlessServerObject {
     users: Vec<VlessUser>,
 }
 
-pub struct VlessOutbound {
-    vnext: VlessServerObject,
+struct VlessOutboundSettings {
+    vnext: Vec<VlessServerObject>,
 }
 
-pub fn create_outbound_object(data: VlessData) -> VlessOutbound {
-    return VlessOutbound {
-        vnext: VlessServerObject {
+fn create_outbound_object(data: VlessData) -> VlessOutboundSettings {
+    return VlessOutboundSettings {
+        vnext: vec![VlessServerObject {
             port: data.address_data.port,
             address: data.address_data.address,
             users: vec![VlessUser {
@@ -62,7 +62,7 @@ pub fn create_outbound_object(data: VlessData) -> VlessOutbound {
                 encryption: data.query.encryption,
                 level: 0,
             }],
-        },
+        }],
     };
 }
 
