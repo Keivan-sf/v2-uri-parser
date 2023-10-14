@@ -34,6 +34,8 @@ pub struct VlessData {
     address_data: VlessAddress,
 }
 
+// Outbound structs
+
 struct VlessUser {
     id: String,
     encryption: String,
@@ -51,18 +53,28 @@ struct VlessOutboundSettings {
     vnext: Vec<VlessServerObject>,
 }
 
-fn create_outbound_object(data: VlessData) -> VlessOutboundSettings {
-    return VlessOutboundSettings {
-        vnext: vec![VlessServerObject {
-            port: data.address_data.port,
-            address: data.address_data.address,
-            users: vec![VlessUser {
-                id: data.address_data.uuid,
-                flow: data.query.flow,
-                encryption: data.query.encryption,
-                level: 0,
+pub struct VlessOutbound {
+    settings: VlessOutboundSettings,
+    protocol: String,
+    tag: String,
+}
+
+fn create_outbound_object(data: VlessData) -> VlessOutbound {
+    return VlessOutbound {
+        protocol: String::from("vless"),
+        tag: String::from("proxy"),
+        settings: VlessOutboundSettings {
+            vnext: vec![VlessServerObject {
+                port: data.address_data.port,
+                address: data.address_data.address,
+                users: vec![VlessUser {
+                    id: data.address_data.uuid,
+                    flow: data.query.flow,
+                    encryption: data.query.encryption,
+                    level: 0,
+                }],
             }],
-        }],
+        },
     };
 }
 
