@@ -57,7 +57,28 @@ enum OutboundSettings {
     Vless(VlessOutboundSettings),
 }
 
-struct StreamSettings {}
+struct TlsSettings {
+    allowInsecure: bool,
+    certificates: u8,
+    serverName: String,
+    alpn: u8,
+    enableSessionResumption: bool,
+    disableSystemRoot: bool,
+    minVersion: String,
+    maxVersion: String,
+    cipherSuites: String,
+    preferServerCipherSuites: bool,
+    fingerprint: String,
+    rejectUnknownSni: bool,
+    pinnedPeerCertificateChainSha256: u8,
+    pinnedPeerCertificatePublicKeySha256: u8,
+}
+
+struct StreamSettings {
+    network: String,
+    security: String,
+    tlsSettings: TlsSettings,
+}
 
 pub struct Outbound {
     settings: OutboundSettings,
