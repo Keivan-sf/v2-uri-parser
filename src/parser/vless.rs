@@ -1,6 +1,13 @@
+use querystring;
+use serde::{Deserialize, Serialize};
 use std::process::exit;
 
-use querystring;
+#[derive(Serialize, Deserialize)]
+struct Person {
+    name: String,
+    age: u8,
+    phones: Vec<String>,
+}
 
 struct VlessQuery {
     security: String,
@@ -36,6 +43,7 @@ pub struct VlessData {
 
 // Outbound structs
 
+#[derive(Serialize, Deserialize)]
 struct VlessUser {
     id: String,
     encryption: String,
@@ -43,16 +51,19 @@ struct VlessUser {
     level: u8,
 }
 
+#[derive(Serialize, Deserialize)]
 struct VlessServerObject {
     address: String,
     port: u16,
     users: Vec<VlessUser>,
 }
 
+#[derive(Serialize, Deserialize)]
 struct VlessOutboundSettings {
     vnext: Vec<VlessServerObject>,
 }
 
+#[derive(Serialize, Deserialize)]
 enum OutboundSettings {
     Vless(VlessOutboundSettings),
 }
@@ -61,6 +72,7 @@ struct TlsSettings {
     allowInsecure: bool,
     certificates: u8,
     serverName: String,
+    // u8 is a dummy type here
     alpn: u8,
     enableSessionResumption: bool,
     disableSystemRoot: bool,
@@ -80,6 +92,7 @@ struct StreamSettings {
     tlsSettings: TlsSettings,
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct Outbound {
     settings: OutboundSettings,
     protocol: String,
@@ -256,5 +269,14 @@ mod tests {
         assert_eq!(parsed.address, "127.0.0.1");
         assert_eq!(parsed.port, 3012);
         assert_eq!(parsed.uuid, "uu0id");
+    }
+
+    #[test]
+    fn log_vless_outbound() {
+        let v = "vless://4d2c3e35-749d-52e3-bdb6-3f3f4950c183@tre.test.one:2053?security=reality&type=tcp&flow=xtls-rprx-vision#test-name";
+        let data = get_vless_data(v);
+        let outbound_object = create_outbound_object(data);
+        let serialized = serde_json::to_string(&outbound_object).unwrap();
+        println!("serialized = {}", serialized);
     }
 }
