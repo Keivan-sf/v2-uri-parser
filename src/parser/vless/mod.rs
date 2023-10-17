@@ -1,45 +1,7 @@
 use querystring;
+mod models;
 use serde::{Deserialize, Serialize};
 use std::process::exit;
-
-#[derive(Serialize, Deserialize)]
-struct Person {
-    name: String,
-    age: u8,
-    phones: Vec<String>,
-}
-
-struct VlessQuery {
-    security: String,
-    sni: String,
-    fp: String,
-    pbk: String,
-    sid: String,
-    r#type: String,
-    flow: String,
-    path: String,
-    encryption: String,
-    header_type: String,
-    host: String,
-    seed: String,
-    quic_security: String,
-    r#key: String,
-    mode: String,
-    service_name: String,
-    slpn: String,
-    spx: String,
-}
-
-struct VlessAddress {
-    uuid: String,
-    address: String,
-    port: u16,
-}
-
-pub struct VlessData {
-    query: VlessQuery,
-    address_data: VlessAddress,
-}
 
 // Outbound structs
 
@@ -101,7 +63,7 @@ pub struct Outbound {
     tag: String,
 }
 
-fn create_outbound_object(data: VlessData) -> Outbound {
+fn create_outbound_object(data: models::VlessData) -> Outbound {
     return Outbound {
         protocol: String::from("vless"),
         tag: String::from("proxy"),
@@ -120,7 +82,7 @@ fn create_outbound_object(data: VlessData) -> Outbound {
     };
 }
 
-pub fn get_vless_data(uri: &str) -> VlessData {
+pub fn get_vless_data(uri: &str) -> models::VlessData {
     let data = uri.split_once("vless://").unwrap().1;
     let query_and_name = uri.split_once("?").unwrap().1;
     let query = query_and_name
@@ -129,13 +91,13 @@ pub fn get_vless_data(uri: &str) -> VlessData {
         .0;
     let parsed_query = parse_vless_query(query);
     let parsed_address = parse_vless_address(data.split_once("?").unwrap().0);
-    return VlessData {
+    return models::VlessData {
         query: parsed_query,
         address_data: parsed_address,
     };
 }
 
-fn parse_vless_address(raw_data: &str) -> VlessAddress {
+fn parse_vless_address(raw_data: &str) -> models::VlessAddress {
     let (uuid, raw_address): (String, &str) = match raw_data.split_once("@") {
         None => {
             println!("Wrong vless format, no `@` found in the address");
@@ -155,17 +117,17 @@ fn parse_vless_address(raw_data: &str) -> VlessAddress {
                 .expect("Wrong vless format, port is not a number"),
         ),
     };
-    return VlessAddress {
+    return models::VlessAddress {
         uuid,
         address,
         port,
     };
 }
 
-fn parse_vless_query(raw_query: &str) -> VlessQuery {
+fn parse_vless_query(raw_query: &str) -> models::VlessQuery {
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
-    let a = VlessQuery {
+    let a = models::VlessQuery {
         path: get_parameter_value(&query, "path"),
         pbk: get_parameter_value(&query, "pbk"),
         security: get_parameter_value(&query, "security"),
