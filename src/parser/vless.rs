@@ -68,6 +68,7 @@ enum OutboundSettings {
     Vless(VlessOutboundSettings),
 }
 
+#[allow(non_snake_case)]
 struct TlsSettings {
     allowInsecure: bool,
     certificates: u8,
@@ -86,6 +87,7 @@ struct TlsSettings {
     pinnedPeerCertificatePublicKeySha256: u8,
 }
 
+#[allow(non_snake_case)]
 struct StreamSettings {
     network: String,
     security: String,
