@@ -2,66 +2,7 @@ use querystring;
 mod models;
 use serde::{Deserialize, Serialize};
 use std::process::exit;
-
-// Outbound structs
-
-#[derive(Serialize, Deserialize)]
-struct VlessUser {
-    id: String,
-    encryption: String,
-    flow: String,
-    level: u8,
-}
-
-#[derive(Serialize, Deserialize)]
-struct VlessServerObject {
-    address: String,
-    port: u16,
-    users: Vec<VlessUser>,
-}
-
-#[derive(Serialize, Deserialize)]
-struct VlessOutboundSettings {
-    vnext: Vec<VlessServerObject>,
-}
-
-#[derive(Serialize, Deserialize)]
-enum OutboundSettings {
-    Vless(VlessOutboundSettings),
-}
-
-#[allow(non_snake_case)]
-struct TlsSettings {
-    allowInsecure: bool,
-    certificates: u8,
-    serverName: String,
-    // u8 is a dummy type here
-    alpn: u8,
-    enableSessionResumption: bool,
-    disableSystemRoot: bool,
-    minVersion: String,
-    maxVersion: String,
-    cipherSuites: String,
-    preferServerCipherSuites: bool,
-    fingerprint: String,
-    rejectUnknownSni: bool,
-    pinnedPeerCertificateChainSha256: u8,
-    pinnedPeerCertificatePublicKeySha256: u8,
-}
-
-#[allow(non_snake_case)]
-struct StreamSettings {
-    network: String,
-    security: String,
-    tlsSettings: TlsSettings,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Outbound {
-    settings: OutboundSettings,
-    protocol: String,
-    tag: String,
-}
+use crate::parser::config_models::*;
 
 fn create_outbound_object(data: models::VlessData) -> Outbound {
     return Outbound {
