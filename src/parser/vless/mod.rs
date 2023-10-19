@@ -233,4 +233,16 @@ mod tests {
         let serialized = serde_json::to_string(&outbound_object).unwrap();
         println!("serialized = {}", serialized);
     }
+
+    #[test]
+    fn create_outbound_for_tcp_reality() {
+        let v = "vless://3d2c2r05-y739-51e3-bd86-3f3f4950c183@tr.deet23ngdell.com:1818?security=reality&encryption=none&pbk=7xhH8b_VkliBxgulljcyPOH-bYoA2dl-XAdZAsfhk04&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=bench.sh&sid=6bt85979e30d4fc2#%F0%9F%87%B9%F0%9F%87%B7+H";
+        let data = get_vless_data(v);
+        let outbound_object = create_outbound_object(data);
+        let serialized = serde_json::to_string(&outbound_object).unwrap();
+        assert_eq!(
+            serialized,
+            r#"{"settings":{"Vless":{"vnext":[{"address":"tr.deet23ngdell.com","port":1818,"users":[{"id":"3d2c2r05-y739-51e3-bd86-3f3f4950c183","encryption":"none","flow":"xtls-rprx-vision","level":0}]}]}},"streamSettings":{"network":"tcp","security":"reality","tlsSettings":null,"wsSettings":null,"tcpSettings":{"header":{"type":"none"},"acceptProxyProtocol":null},"realitySettings":{"fingerprint":"chrome","serverName":"bench.sh","publicKey":"7xhH8b_VkliBxgulljcyPOH-bYoA2dl-XAdZAsfhk04","shortId":"6bt85979e30d4fc2","spiderX":""}},"protocol":"vless","tag":"proxy"}"#
+        );
+    }
 }
