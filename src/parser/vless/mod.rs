@@ -1,7 +1,6 @@
 use querystring;
 mod models;
 use crate::parser::config_models::*;
-use serde::{Deserialize, Serialize};
 use std::process::exit;
 
 fn create_outbound_object(data: models::VlessData) -> Outbound {
@@ -64,7 +63,11 @@ fn create_outbound_object(data: models::VlessData) -> Outbound {
                 users: vec![VlessUser {
                     id: data.address_data.uuid,
                     flow: data.query.flow,
-                    encryption: data.query.encryption,
+                    encryption: if data.query.encryption.len() > 0 {
+                        data.query.encryption
+                    } else {
+                        String::from("none")
+                    },
                     level: 0,
                 }],
             }],
@@ -193,6 +196,7 @@ mod tests {
         assert_eq!(parsed_query.slpn, "");
         assert_eq!(parsed_query.spx, "");
     }
+
     #[test]
     fn parse_vless_query_with_defaults() {
         let query = "";
@@ -216,6 +220,7 @@ mod tests {
         assert_eq!(parsed_query.slpn, "");
         assert_eq!(parsed_query.spx, "");
     }
+
     #[test]
     fn parse_vless_host() {
         let raw_host = "uu0id@127.0.0.1:3012";
@@ -231,6 +236,7 @@ mod tests {
         let data = get_vless_data(v);
         let outbound_object = create_outbound_object(data);
         let serialized = serde_json::to_string(&outbound_object).unwrap();
+
         assert_eq!(
             serialized,
             r#"{"settings":{"vnext":[{"address":"tr.deet23ngdell.com","port":1818,"users":[{"id":"3d2c2r05-y739-51e3-bd86-3f3f4950c183","encryption":"none","flow":"xtls-rprx-vision","level":0}]}]},"streamSettings":{"network":"tcp","security":"reality","tlsSettings":null,"wsSettings":null,"tcpSettings":{"header":{"type":"none"},"acceptProxyProtocol":null},"realitySettings":{"fingerprint":"chrome","serverName":"bench.sh","publicKey":"7xhH8b_VkliBxgulljcyPOH-bYoA2dl-XAdZAsfhk04","shortId":"6bt85979e30d4fc2","spiderX":""}},"protocol":"vless","tag":"proxy"}"#
