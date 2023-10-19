@@ -35,6 +35,16 @@ fn create_outbound_object(data: models::VlessData) -> Outbound {
             } else {
                 None
             },
+            tcpSettings: if data.query.r#type == String::from("tcp") {
+                Some(TCPSettings {
+                    header: Some(NonHeaderObject {
+                        r#type: String::from("none"),
+                    }),
+                    acceptProxyProtocol: None,
+                })
+            } else {
+                None
+            },
         },
         settings: OutboundSettings::Vless(VlessOutboundSettings {
             vnext: vec![VlessServerObject {
