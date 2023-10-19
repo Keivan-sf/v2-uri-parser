@@ -21,6 +21,7 @@ pub struct VlessOutboundSettings {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum OutboundSettings {
     Vless(VlessOutboundSettings),
 }
