@@ -26,34 +26,33 @@ pub enum OutboundSettings {
 }
 
 #[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
 pub struct TlsSettings {
-    pub allowInsecure: bool,
-    pub certificates: u8,
-    pub serverName: String,
-    // u8 is a dummy type here
-    pub alpn: u8,
-    pub enableSessionResumption: bool,
-    pub disableSystemRoot: bool,
-    pub minVersion: String,
-    pub maxVersion: String,
-    pub cipherSuites: String,
-    pub preferServerCipherSuites: bool,
-    pub fingerprint: String,
-    pub rejectUnknownSni: bool,
-    pub pinnedPeerCertificateChainSha256: u8,
-    pub pinnedPeerCertificatePublicKeySha256: u8,
+    pub allowInsecure: Option<bool>,
+    pub serverName: Option<String>,
+    pub enableSessionResumption: Option<bool>,
+    pub disableSystemRoot: Option<bool>,
+    pub minVersion: Option<String>,
+    pub maxVersion: Option<String>,
+    pub cipherSuites: Option<String>,
+    pub preferServerCipherSuites: Option<bool>,
+    pub fingerprint: Option<String>,
+    pub rejectUnknownSni: Option<bool>,
 }
 
 #[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
 pub struct StreamSettings {
     pub network: String,
     pub security: String,
-    pub tlsSettings: TlsSettings,
+    pub tlsSettings: Option<TlsSettings>,
 }
 
+#[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct Outbound {
     pub settings: OutboundSettings,
+    pub streamSettings: StreamSettings,
     pub protocol: String,
     pub tag: String,
 }

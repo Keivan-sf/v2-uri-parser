@@ -1,13 +1,33 @@
 use querystring;
 mod models;
+use crate::parser::config_models::*;
 use serde::{Deserialize, Serialize};
 use std::process::exit;
-use crate::parser::config_models::*;
 
 fn create_outbound_object(data: models::VlessData) -> Outbound {
     return Outbound {
         protocol: String::from("vless"),
         tag: String::from("proxy"),
+        streamSettings: StreamSettings {
+            network: data.query.r#type,
+            security: data.query.security.clone(),
+            tlsSettings: if data.query.security == String::from("tls") {
+                Some(TlsSettings {
+                    rejectUnknownSni: None,
+                    enableSessionResumption: None,
+                    minVersion: None,
+                    maxVersion: None,
+                    cipherSuites: None,
+                    disableSystemRoot: None,
+                    preferServerCipherSuites: None,
+                    fingerprint: Some(String::from("")),
+                    serverName: Some(data.query.sni),
+                    allowInsecure: Some(false),
+                })
+            } else {
+                None
+            },
+        },
         settings: OutboundSettings::Vless(VlessOutboundSettings {
             vnext: vec![VlessServerObject {
                 port: data.address_data.port,
