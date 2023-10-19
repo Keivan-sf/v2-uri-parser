@@ -25,6 +25,26 @@ pub enum OutboundSettings {
     Vless(VlessOutboundSettings),
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct NonHeaderObject {
+    pub r#type: String,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
+pub struct TCPSettings {
+    header: Option<NonHeaderObject>,
+    acceptProxyProtocol: Option<bool>,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
+pub struct WsSettings {
+    pub path: Option<String>,
+    // Headers             map[string]string headers
+    pub acceptProxyProtocol: Option<bool>,
+}
+
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct TlsSettings {
@@ -46,6 +66,7 @@ pub struct StreamSettings {
     pub network: String,
     pub security: String,
     pub tlsSettings: Option<TlsSettings>,
+    pub wsSettings: Option<WsSettings>,
 }
 
 #[allow(non_snake_case)]

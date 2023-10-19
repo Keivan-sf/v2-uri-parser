@@ -9,7 +9,7 @@ fn create_outbound_object(data: models::VlessData) -> Outbound {
         protocol: String::from("vless"),
         tag: String::from("proxy"),
         streamSettings: StreamSettings {
-            network: data.query.r#type,
+            network: data.query.r#type.clone(),
             security: data.query.security.clone(),
             tlsSettings: if data.query.security == String::from("tls") {
                 Some(TlsSettings {
@@ -23,6 +23,14 @@ fn create_outbound_object(data: models::VlessData) -> Outbound {
                     fingerprint: Some(String::from("")),
                     serverName: Some(data.query.sni),
                     allowInsecure: Some(false),
+                })
+            } else {
+                None
+            },
+            wsSettings: if data.query.r#type == String::from("ws") {
+                Some(WsSettings {
+                    path: Some(String::from("")),
+                    acceptProxyProtocol: None,
                 })
             } else {
                 None
