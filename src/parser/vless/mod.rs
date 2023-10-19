@@ -21,7 +21,7 @@ fn create_outbound_object(data: models::VlessData) -> Outbound {
                     disableSystemRoot: None,
                     preferServerCipherSuites: None,
                     fingerprint: Some(String::from("")),
-                    serverName: Some(data.query.sni),
+                    serverName: Some(data.query.sni.clone()),
                     allowInsecure: Some(false),
                 })
             } else {
@@ -41,6 +41,17 @@ fn create_outbound_object(data: models::VlessData) -> Outbound {
                         r#type: String::from("none"),
                     }),
                     acceptProxyProtocol: None,
+                })
+            } else {
+                None
+            },
+            realitySettings: if data.query.security == String::from("reality") {
+                Some(RealitySettings {
+                    publicKey: data.query.pbk,
+                    serverName: data.query.sni.clone(),
+                    shortId: data.query.sid,
+                    spiderX: String::from(""),
+                    fingerprint: data.query.fp,
                 })
             } else {
                 None

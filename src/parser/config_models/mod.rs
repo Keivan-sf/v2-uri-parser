@@ -32,6 +32,16 @@ pub struct NonHeaderObject {
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
+pub struct RealitySettings {
+    pub fingerprint: String,
+    pub serverName: String,
+    pub publicKey: String,
+    pub shortId: String,
+    pub spiderX: String,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
 pub struct TCPSettings {
     pub header: Option<NonHeaderObject>,
     pub acceptProxyProtocol: Option<bool>,
@@ -68,6 +78,7 @@ pub struct StreamSettings {
     pub tlsSettings: Option<TlsSettings>,
     pub wsSettings: Option<WsSettings>,
     pub tcpSettings: Option<TCPSettings>,
+    pub realitySettings: Option<RealitySettings>,
 }
 
 #[allow(non_snake_case)]
