@@ -3,7 +3,7 @@ mod models;
 use crate::parser::config_models::*;
 use std::process::exit;
 
-fn create_outbound_object(data: models::VlessData) -> Outbound {
+pub fn create_outbound_object(data: models::VlessData) -> Outbound {
     return Outbound {
         protocol: String::from("vless"),
         tag: String::from("proxy"),
