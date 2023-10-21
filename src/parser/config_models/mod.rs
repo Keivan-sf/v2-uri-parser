@@ -33,6 +33,13 @@ pub struct NonHeaderObject {
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
+pub struct GRPCSettings {
+    pub multiMode: bool,
+    pub serviceName: String,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
 pub struct RealitySettings {
     pub fingerprint: String,
     pub serverName: String,
@@ -80,6 +87,7 @@ pub struct StreamSettings {
     pub wsSettings: Option<WsSettings>,
     pub tcpSettings: Option<TCPSettings>,
     pub realitySettings: Option<RealitySettings>,
+    pub grpcSettings: Option<GRPCSettings>,
 }
 
 #[allow(non_snake_case)]

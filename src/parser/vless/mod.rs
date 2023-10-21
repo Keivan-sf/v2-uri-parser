@@ -55,6 +55,14 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
             } else {
                 None
             },
+            grpcSettings: if data.query.r#type == String::from("grpc") {
+                Some(GRPCSettings {
+                    multiMode: false,
+                    serviceName: data.query.service_name,
+                })
+            } else {
+                None
+            },
         },
         settings: OutboundSettings::Vless(VlessOutboundSettings {
             vnext: vec![VlessServerObject {
