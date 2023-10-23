@@ -63,6 +63,17 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
             } else {
                 None
             },
+            quicSettings: if data.query.r#type == String::from("quic") {
+                Some(QuicSettings {
+                    header: Some(NonHeaderObject {
+                        r#type: String::from("none"),
+                    }),
+                    security: String::from("none"),
+                    key: String::from(""),
+                })
+            } else {
+                None
+            },
         },
         settings: OutboundSettings::Vless(VlessOutboundSettings {
             vnext: vec![VlessServerObject {
@@ -247,7 +258,7 @@ mod tests {
 
         assert_eq!(
             serialized,
-            r#"{"settings":{"vnext":[{"address":"tr.deet23ngdell.com","port":1818,"users":[{"id":"3d2c2r05-y739-51e3-bd86-3f3f4950c183","encryption":"none","flow":"xtls-rprx-vision","level":0}]}]},"streamSettings":{"network":"tcp","security":"reality","tlsSettings":null,"wsSettings":null,"tcpSettings":{"header":{"type":"none"},"acceptProxyProtocol":null},"realitySettings":{"fingerprint":"chrome","serverName":"bench.sh","publicKey":"7xhH8b_VkliBxgulljcyPOH-bYoA2dl-XAdZAsfhk04","shortId":"6bt85979e30d4fc2","spiderX":""}},"protocol":"vless","tag":"proxy"}"#
+            r#"{"settings":{"vnext":[{"address":"tr.deet23ngdell.com","port":1818,"users":[{"id":"3d2c2r05-y739-51e3-bd86-3f3f4950c183","encryption":"none","flow":"xtls-rprx-vision","level":0}]}]},"streamSettings":{"network":"tcp","security":"reality","tlsSettings":null,"wsSettings":null,"tcpSettings":{"header":{"type":"none"},"acceptProxyProtocol":null},"realitySettings":{"fingerprint":"chrome","serverName":"bench.sh","publicKey":"7xhH8b_VkliBxgulljcyPOH-bYoA2dl-XAdZAsfhk04","shortId":"6bt85979e30d4fc2","spiderX":""},"grpcSettings":null,"quicSettings":null},"protocol":"vless","tag":"proxy"}"#
         );
     }
 }

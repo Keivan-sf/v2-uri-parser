@@ -33,6 +33,14 @@ pub struct NonHeaderObject {
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
+pub struct QuicSettings {
+    pub header: Option<NonHeaderObject>,
+    pub security: String,
+    pub key: String,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
 pub struct GRPCSettings {
     pub multiMode: bool,
     pub serviceName: String,
@@ -88,6 +96,7 @@ pub struct StreamSettings {
     pub tcpSettings: Option<TCPSettings>,
     pub realitySettings: Option<RealitySettings>,
     pub grpcSettings: Option<GRPCSettings>,
+    pub quicSettings: Option<QuicSettings>,
 }
 
 #[allow(non_snake_case)]
