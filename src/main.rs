@@ -21,7 +21,6 @@ fn main() {
         }
     };
     println!("the uri is: {}", cli.uri);
-    // let args: Vec<String> = std::env::args().collect();
-    // let uri = args.get(1).unwrap();
-    // parser::parse(uri);
+    let json_config = parser::create_json_config(&cli.uri);
+    println!("The json config is: {}" , json_config);
 }

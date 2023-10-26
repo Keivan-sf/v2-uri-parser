@@ -107,3 +107,8 @@ pub struct Outbound {
     pub protocol: String,
     pub tag: String,
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct Config {
+    pub outbounds: Vec<Outbound>,
+}
