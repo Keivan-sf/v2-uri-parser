@@ -109,6 +109,32 @@ pub struct Outbound {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct InboundSettings {
+    pub udp: bool,
+}
+
+#[derive(Serialize, Deserialize)]
+#[allow(non_snake_case)]
+pub struct SniffingSettings {
+    pub enabled: Option<bool>,
+    pub destOverride: Option<Vec<String>>,
+    pub domainsExcluded: Option<Vec<String>>,
+    pub metadataOnly: Option<bool>,
+    pub routeOnly: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Inbound {
+    pub listen: String,
+    pub port: u16,
+    pub protocol: String,
+    pub settings: InboundSettings,
+    pub sniffing: Option<SniffingSettings>,
+    pub tag: String,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct Config {
     pub outbounds: Vec<Outbound>,
+    pub inbounds: Option<Vec<Inbound>>,
 }

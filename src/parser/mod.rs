@@ -5,16 +5,17 @@ pub mod config_models;
 mod uri_identifier;
 mod vless;
 
-pub fn create_json_config(uri: &str) -> String {
-    let config = create_config(uri);
+pub fn create_json_config(uri: &str, socks_port: Option<u16>) -> String {
+    let config = create_config(uri, socks_port);
     let serialized = serde_json::to_string(&config).unwrap();
     return serialized;
 }
 
-pub fn create_config(uri: &str) -> Config {
+pub fn create_config(uri: &str, socks_port: Option<u16>) -> Config {
     let outbound_object = create_outbound_object(uri);
     let config = Config {
         outbounds: vec![outbound_object],
+        inbounds: None,
     };
     return config;
 }
