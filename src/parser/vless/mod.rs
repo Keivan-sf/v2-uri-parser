@@ -1,6 +1,6 @@
 use querystring;
 mod models;
-use crate::parser::config_models::*;
+use crate::config_models::*;
 use std::process::exit;
 
 pub fn create_outbound_object(data: models::VlessData) -> Outbound {

@@ -1,6 +1,7 @@
 mod parser;
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
+pub mod config_models;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -21,6 +22,6 @@ fn main() {
         }
     };
     println!("the uri is: {}", cli.uri);
-    let json_config = parser::create_json_config(&cli.uri);
+    let json_config = parser::create_json_config(&cli.uri, cli.socksport);
     println!("The json config is: {}" , json_config);
 }
