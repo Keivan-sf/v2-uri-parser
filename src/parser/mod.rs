@@ -1,4 +1,5 @@
 use crate::config_models;
+use crate::lib::inboundGenerator;
 use std::process::exit;
 
 mod uri_identifier;
@@ -12,9 +13,13 @@ pub fn create_json_config(uri: &str, socks_port: Option<u16>) -> String {
 
 pub fn create_config(uri: &str, socks_port: Option<u16>) -> config_models::Config {
     let outbound_object = create_outbound_object(uri);
+    let inbound_config =
+        inboundGenerator::generate_inbound_config(inboundGenerator::InboundGenerationOptions {
+            socks_port,
+        });
     let config = config_models::Config {
         outbounds: vec![outbound_object],
-        inbounds: None,
+        inbounds: inbound_config,
     };
     return config;
 }

@@ -2,6 +2,7 @@ mod parser;
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 pub mod config_models;
+pub mod lib;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]

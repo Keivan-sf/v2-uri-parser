@@ -136,5 +136,5 @@ pub struct Inbound {
 #[derive(Serialize, Deserialize)]
 pub struct Config {
     pub outbounds: Vec<Outbound>,
-    pub inbounds: Option<Vec<Inbound>>,
+    pub inbounds: Vec<Inbound>,
 }
