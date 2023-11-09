@@ -1,5 +1,5 @@
 use crate::config_models;
-use crate::lib::inboundGenerator;
+use crate::utils::inboundGenerator;
 use std::process::exit;
 
 mod uri_identifier;
