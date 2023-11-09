@@ -1,1 +1,1 @@
-pub mod inboundGenerator;
+pub mod inbound_generator;
