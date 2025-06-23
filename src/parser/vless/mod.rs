@@ -28,6 +28,9 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
             },
             wsSettings: if data.query.r#type == String::from("ws") {
                 Some(WsSettings {
+                    headers: Some(HeaderSetting {
+                        Host: Some(data.query.host),
+                    }),
                     path: Some(data.query.path),
                     acceptProxyProtocol: None,
                 })

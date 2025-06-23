@@ -65,9 +65,15 @@ pub struct TCPSettings {
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
+pub struct HeaderSetting {
+    pub Host: Option<String>,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
 pub struct WsSettings {
     pub path: Option<String>,
-    // Headers             map[string]string headers
+    pub headers: Option<HeaderSetting>,
     pub acceptProxyProtocol: Option<bool>,
 }
 
