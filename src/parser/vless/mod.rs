@@ -31,7 +31,11 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
                     headers: Some(HeaderSetting {
                         Host: Some(data.query.host),
                     }),
-                    path: Some(data.query.path),
+                    path: Some(
+                        urlencoding::decode(data.query.path.as_str())
+                            .unwrap()
+                            .into_owned(),
+                    ),
                     acceptProxyProtocol: None,
                 })
             } else {
