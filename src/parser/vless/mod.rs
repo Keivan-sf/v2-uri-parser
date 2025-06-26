@@ -124,7 +124,8 @@ fn parse_vless_address(raw_data: &str) -> models::VlessAddress {
         }
         Some(data) => (String::from(data.0), data.1),
     };
-    let (address, port): (String, u16) = match raw_address.split_once(":") {
+    let address_wo_slash = raw_address.strip_suffix("/").unwrap_or(raw_address);
+    let (address, port): (String, u16) = match address_wo_slash.split_once(":") {
         None => {
             println!("Wrong vless format, no `:` found in the address");
             exit(0);
@@ -182,6 +183,15 @@ fn get_parameter_value(query: &Vec<(&str, &str)>, param: &str) -> String {
 mod tests {
     use super::*;
     #[test]
+    fn vless_test_2() {
+        let v = "vless://2dc56709-sdfs-sdfs-2234-128904@nwarne.fast-ip.com:80/?type=ws&encryption=none&host=Shuposipet.com&path=%2Fde%3Fed%3D1048#[test]@test";
+        let data = get_vless_data(v);
+        assert_eq!(data.address_data.address, "nwarne.fast-ip.com");
+        assert_eq!(data.address_data.uuid, "2dc56709-sdfs-sdfs-2234-128904");
+        assert_eq!(data.address_data.port, 80);
+        assert_eq!(data.query.encryption, "none");
+        assert_eq!(data.query.r#type, "ws");
+    }
     fn vless_test() {
         let v = "vless://4d2c3e35-749d-52e3-bdb6-3f3f4950c183@tre.test.one:2053?security=reality&type=tcp&flow=xtls-rprx-vision#test-name";
         let data = get_vless_data(v);
