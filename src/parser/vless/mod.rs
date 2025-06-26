@@ -192,6 +192,8 @@ mod tests {
         assert_eq!(data.query.encryption, "none");
         assert_eq!(data.query.r#type, "ws");
     }
+
+    #[test]
     fn vless_test() {
         let v = "vless://4d2c3e35-749d-52e3-bdb6-3f3f4950c183@tre.test.one:2053?security=reality&type=tcp&flow=xtls-rprx-vision#test-name";
         let data = get_vless_data(v);
