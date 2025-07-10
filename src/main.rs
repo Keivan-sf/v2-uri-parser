@@ -4,7 +4,7 @@ pub mod config_models;
 pub mod utils;
 
 #[derive(Parser)]
-#[command(author ,version = "0.1.0", about = "V2ray URI parser", long_about = None)]
+#[command(author ,version = "0.1.1", about = "V2ray URI parser", long_about = None)]
 struct Cli {
     uri: String,
     #[arg(short, long, value_name = "socksport")]
