@@ -1,6 +1,7 @@
 use querystring;
 mod models;
 use crate::config_models::*;
+use http::Uri;
 use std::process::exit;
 
 pub fn create_outbound_object(data: models::VlessData) -> Outbound {
@@ -125,22 +126,13 @@ fn parse_vless_address(raw_data: &str) -> models::VlessAddress {
         Some(data) => (String::from(data.0), data.1),
     };
     let address_wo_slash = raw_address.strip_suffix("/").unwrap_or(raw_address);
-    let (address, port): (String, u16) = match address_wo_slash.split_once(":") {
-        None => {
-            println!("Wrong vless format, no `:` found in the address");
-            exit(0);
-        }
-        Some(data) => (
-            String::from(data.0),
-            data.1
-                .parse::<u16>()
-                .expect("Wrong vless format, port is not a number"),
-        ),
-    };
+
+    let parsed = address_wo_slash.parse::<Uri>().unwrap();
+
     return models::VlessAddress {
         uuid,
-        address,
-        port,
+        address: parsed.host().unwrap().to_string(),
+        port: parsed.port().unwrap().as_u16(),
     };
 }
 
@@ -265,6 +257,16 @@ mod tests {
         let parsed = parse_vless_address(raw_host);
         assert_eq!(parsed.address, "127.0.0.1");
         assert_eq!(parsed.port, 3012);
+        assert_eq!(parsed.uuid, "uu0id");
+    }
+
+    #[test]
+    fn parse_vless_ipv6_host() {
+        let v = "vless://4d91916f-a7fd-419b-8b90-640bb8d1b9f4@[2a06:98c1:3120::1]:443?path=%2FPSZPkYG71g6bn84o%2FMTQxLjE0OC4yMDMuNg&security=tls&alpn=http%2F1.1&encryption=none&host=titantablomanahamrah.ir&fp=randomized&type=ws&sni=TITanTabLOmaNAHaMRaH.IR#";
+        let raw_host = "uu0id@[2a06:98c1:3120::1]:443";
+        let parsed = parse_vless_address(raw_host);
+        assert_eq!(parsed.port, 443);
+        assert_eq!(parsed.address, "[2a06:98c1:3120::1]");
         assert_eq!(parsed.uuid, "uu0id");
     }
 
