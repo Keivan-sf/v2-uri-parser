@@ -44,8 +44,8 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
             },
             tcpSettings: if data.query.r#type == String::from("tcp") {
                 Some(TCPSettings {
-                    header: Some(NonHeaderObject {
-                        r#type: String::from("none"),
+                    header: Some(TCPHeader {
+                        r#type: data.query.header_type.clone(),
                     }),
                     acceptProxyProtocol: None,
                 })
@@ -174,6 +174,22 @@ fn get_parameter_value(query: &Vec<(&str, &str)>, param: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn vless_tcp_header_test() {
+        let v = "vless://1010501a-ca9a-479c-84d0-1308d97789b5@104.21.25.109:443?security=reality&alpn=http%2F1.1&encryption=none&pbk=testpub&host=mehr14-n.gowow31220.workers.dev&headerType=http&fp=chrome&spx=spideex&type=tcp&flow=xtls-rprx-vision&sni=mehr14-iran-mehr14-iran-mehr14-iran-mehr14-iran-mehr14-iran.gowow31220.workers.dev&sid=testshort#%E2%AD%90%EF%B8%8F%20Telegram%20%3D%20%40z_v2ray";
+        let data = create_outbound_object(get_vless_data(v));
+        assert_eq!(
+            data.streamSettings
+                .tcpSettings
+                .unwrap()
+                .header
+                .unwrap()
+                .r#type,
+            "http"
+        )
+    }
+
     #[test]
     fn vless_test_2() {
         let v = "vless://2dc56709-sdfs-sdfs-2234-128904@nwarne.fast-ip.com:80/?type=ws&encryption=none&host=Shuposipet.com&path=%2Fde%3Fed%3D1048#[test]@test";

@@ -56,10 +56,15 @@ pub struct RealitySettings {
     pub spiderX: String,
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct TCPHeader {
+    pub r#type: String,
+}
+
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct TCPSettings {
-    pub header: Option<NonHeaderObject>,
+    pub header: Option<TCPHeader>,
     pub acceptProxyProtocol: Option<bool>,
 }
 
