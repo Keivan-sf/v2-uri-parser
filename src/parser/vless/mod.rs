@@ -20,7 +20,7 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
                     cipherSuites: None,
                     disableSystemRoot: None,
                     preferServerCipherSuites: None,
-                    fingerprint: Some(String::from("")),
+                    fingerprint: Some(data.query.fp.clone()),
                     serverName: Some(data.query.sni.clone()),
                     allowInsecure: Some(false),
                 })
