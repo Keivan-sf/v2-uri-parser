@@ -49,6 +49,19 @@ pub struct GRPCSettings {
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
+pub struct KCPSettings {
+    pub mtu: Option<u32>,
+    pub tti: Option<u32>,
+    pub uplinkCapacity: Option<u32>,
+    pub downlinkCapacity: Option<u32>,
+    pub congestion: Option<bool>,
+    pub readBufferSize: Option<u32>,
+    pub writeBufferSize: Option<u32>,
+    pub seed: Option<String>,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
 pub struct RealitySettings {
     pub fingerprint: Option<String>,
     pub serverName: Option<String>,
@@ -110,6 +123,7 @@ pub struct StreamSettings {
     pub realitySettings: Option<RealitySettings>,
     pub grpcSettings: Option<GRPCSettings>,
     pub quicSettings: Option<QuicSettings>,
+    pub kcpSettings: Option<KCPSettings>,
 }
 
 #[allow(non_snake_case)]

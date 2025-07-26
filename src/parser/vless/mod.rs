@@ -79,6 +79,20 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
             } else {
                 None
             },
+            kcpSettings: if network_type == String::from("kcp") {
+                Some(KCPSettings {
+                    mtu: None,
+                    tti: None,
+                    congestion: None,
+                    uplinkCapacity: None,
+                    readBufferSize: None,
+                    writeBufferSize: None,
+                    downlinkCapacity: None,
+                    seed: data.query.seed,
+                })
+            } else {
+                None
+            },
         },
         settings: OutboundSettings::Vless(VlessOutboundSettings {
             vnext: vec![VlessServerObject {
