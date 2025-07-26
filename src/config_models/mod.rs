@@ -78,7 +78,7 @@ pub struct HeaderSetting {
 #[derive(Serialize, Deserialize)]
 pub struct WsSettings {
     pub path: Option<String>,
-    pub headers: Option<HeaderSetting>,
+    pub Host: Option<String>,
     pub acceptProxyProtocol: Option<bool>,
 }
 
