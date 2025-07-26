@@ -85,6 +85,7 @@ pub struct WsSettings {
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct TlsSettings {
+    pub alpn: Option<Vec<String>>,
     pub allowInsecure: Option<bool>,
     pub serverName: Option<String>,
     pub enableSessionResumption: Option<bool>,

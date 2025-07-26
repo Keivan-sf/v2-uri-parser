@@ -13,6 +13,11 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
             security: data.query.security.clone(),
             tlsSettings: if data.query.security == String::from("tls") {
                 Some(TlsSettings {
+                    alpn: if data.query.alpn.len() > 1 {
+                        Some(vec![data.query.alpn])
+                    } else {
+                        None
+                    },
                     rejectUnknownSni: None,
                     enableSessionResumption: None,
                     minVersion: None,
@@ -140,7 +145,12 @@ fn parse_vless_query(raw_query: &str) -> models::VlessQuery {
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     let a = models::VlessQuery {
-        path: get_parameter_value(&query, "path"),
+        alpn: urlencoding::decode(get_parameter_value(&query, "alpn").as_str())
+            .unwrap()
+            .into_owned(),
+        path: urlencoding::decode(get_parameter_value(&query, "path").as_str())
+            .unwrap()
+            .into_owned(),
         pbk: get_parameter_value(&query, "pbk"),
         security: get_parameter_value(&query, "security"),
         sid: get_parameter_value(&query, "sid"),
@@ -218,7 +228,7 @@ mod tests {
 
     #[test]
     fn parse_vless_query_data() {
-        let query = "security=reality&sni=bench.sh&fp=chrome&pbk=7xhH4b_VkliBxGulljcyPOH-bYUA2dl-XAdZAsfhk04&sid=6ba85179e30d4fc2&type=tcp&flow=xtls-rprx-vision&path=/";
+        let query = "security=reality&sni=bench.sh&fp=chrome&pbk=7xhH4b_VkliBxGulljcyPOH-bYUA2dl-XAdZAsfhk04&sid=6ba85179e30d4fc2&type=tcp&flow=xtls-rprx-vision&alpn=http%2F1.1&path=/";
         let parsed_query = parse_vless_query(query);
         assert_eq!(parsed_query.sni, "bench.sh");
         assert_eq!(parsed_query.security, "reality");
@@ -230,6 +240,7 @@ mod tests {
         assert_eq!(parsed_query.sid, "6ba85179e30d4fc2");
         assert_eq!(parsed_query.r#type, "tcp");
         assert_eq!(parsed_query.flow, "xtls-rprx-vision");
+        assert_eq!(parsed_query.alpn, "http/1.1");
         assert_eq!(parsed_query.path, "/");
         assert_eq!(parsed_query.encryption, "");
         assert_eq!(parsed_query.header_type, "");

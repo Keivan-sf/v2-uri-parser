@@ -17,6 +17,7 @@ pub struct VlessQuery {
     pub service_name: String,
     pub slpn: String,
     pub spx: String,
+    pub alpn: String,
 }
 
 pub struct VlessAddress {
