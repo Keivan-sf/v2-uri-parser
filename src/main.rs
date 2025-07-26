@@ -9,10 +9,12 @@ struct Cli {
     uri: String,
     #[arg(short, long, value_name = "socksport")]
     socksport: Option<u16>,
+    #[arg(long, value_name = "httpport")]
+    httpport: Option<u16>,
 }
 
 fn main() {
     let cli = Cli::parse();
-    let json_config = parser::create_json_config(&cli.uri, cli.socksport);
+    let json_config = parser::create_json_config(&cli.uri, cli.socksport, cli.httpport);
     println!("{}", json_config);
 }
