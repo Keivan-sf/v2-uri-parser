@@ -123,7 +123,7 @@ fn parse_vless_address(raw_data: &str) -> models::VlessAddress {
     let parsed = address_wo_slash.parse::<Uri>().unwrap();
 
     return models::VlessAddress {
-        uuid,
+        uuid: url_decode(Some(uuid)).unwrap(),
         address: parsed.host().unwrap().to_string(),
         port: parsed.port().unwrap().as_u16(),
     };
@@ -133,40 +133,36 @@ fn parse_vless_query(raw_query: &str) -> models::VlessQuery {
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     let a = models::VlessQuery {
-        alpn: get_parameter_value(&query, "alpn").and_then(|s| {
-            urlencoding::decode(&s)
-                .ok()
-                .map(|decoded| decoded.into_owned())
-        }),
-        path: get_parameter_value(&query, "path").and_then(|s| {
-            urlencoding::decode(&s)
-                .ok()
-                .map(|decoded| decoded.into_owned())
-        }),
-        authority: get_parameter_value(&query, "authority").and_then(|s| {
-            urlencoding::decode(&s)
-                .ok()
-                .map(|decoded| decoded.into_owned())
-        }),
-        pbk: get_parameter_value(&query, "pbk"),
+        alpn: url_decode(get_parameter_value(&query, "alpn")),
+        path: url_decode(get_parameter_value(&query, "path")),
+        authority: url_decode(get_parameter_value(&query, "authority")),
+        pbk: url_decode(get_parameter_value(&query, "pbk")),
         security: get_parameter_value(&query, "security"),
-        sid: get_parameter_value(&query, "sid"),
+        sid: url_decode(get_parameter_value(&query, "sid")),
         flow: get_parameter_value(&query, "flow"),
         sni: get_parameter_value(&query, "sni"),
-        fp: get_parameter_value(&query, "fp"),
+        fp: url_decode(get_parameter_value(&query, "fp")),
         r#type: get_parameter_value(&query, "type"),
         encryption: get_parameter_value(&query, "encryption"),
         header_type: get_parameter_value(&query, "headerType"),
-        host: get_parameter_value(&query, "host"),
-        seed: get_parameter_value(&query, "seed"),
+        host: url_decode(get_parameter_value(&query, "host")),
+        seed: url_decode(get_parameter_value(&query, "seed")),
         quic_security: get_parameter_value(&query, "quicSecurity"),
         key: get_parameter_value(&query, "key"),
-        mode: get_parameter_value(&query, "mode"),
-        service_name: get_parameter_value(&query, "serviceName"),
+        mode: url_decode(get_parameter_value(&query, "mode")),
+        service_name: url_decode(get_parameter_value(&query, "serviceName")),
         slpn: get_parameter_value(&query, "slpn"),
-        spx: get_parameter_value(&query, "spx"),
+        spx: url_decode(get_parameter_value(&query, "spx")),
     };
     return a;
+}
+
+fn url_decode(value: Option<String>) -> Option<String> {
+    return value.and_then(|s| {
+        urlencoding::decode(&s)
+            .ok()
+            .map(|decoded| decoded.into_owned())
+    });
 }
 
 fn get_parameter_value(query: &Vec<(&str, &str)>, param: &str) -> Option<String> {
