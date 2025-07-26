@@ -28,7 +28,7 @@ pub fn create_outbound_object(uri: &str) -> config_models::Outbound {
     let protocol = uri_identifier::get_uri_protocol(uri);
     match protocol {
         Some(uri_identifier::Protocols::Vless) => {
-            let vless_data = vless::get_vless_data(uri);
+            let vless_data = vless::data::get_data(uri);
             let outbound_object = vless::create_outbound_object(vless_data);
             return outbound_object;
         }
