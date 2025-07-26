@@ -31,8 +31,8 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
             },
             wsSettings: if network_type == String::from("ws") {
                 Some(WsSettings {
-                    Host: data.query.host,
-                    path: data.query.path,
+                    Host: data.query.host.clone(),
+                    path: data.query.path.clone(),
                     acceptProxyProtocol: None,
                 })
             } else {
@@ -89,6 +89,16 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
                     writeBufferSize: None,
                     downlinkCapacity: None,
                     seed: data.query.seed,
+                })
+            } else {
+                None
+            },
+            xhttpSettings: if network_type == String::from("xhttp") {
+                Some(XHTTPSettings {
+                    host: data.query.host.clone(),
+                    path: data.query.path.clone(),
+                    mode: data.query.mode,
+                    extra: data.query.extra.and_then(|e| parse_raw_json(e.as_str())),
                 })
             } else {
                 None
@@ -167,6 +177,7 @@ fn parse_vless_query(raw_query: &str) -> models::VlessQuery {
         service_name: url_decode(get_parameter_value(&query, "serviceName")),
         slpn: get_parameter_value(&query, "slpn"),
         spx: url_decode(get_parameter_value(&query, "spx")),
+        extra: url_decode(get_parameter_value(&query, "extra")),
     };
     return a;
 }
@@ -177,6 +188,15 @@ fn url_decode(value: Option<String>) -> Option<String> {
             .ok()
             .map(|decoded| decoded.into_owned())
     });
+}
+
+fn parse_raw_json(input: &str) -> Option<serde_json::Value> {
+    serde_json::from_str::<serde_json::Value>(input)
+        .ok()
+        .and_then(|v| match v {
+            serde_json::Value::Object(_) => Some(v),
+            _ => None,
+        })
 }
 
 fn get_parameter_value(query: &Vec<(&str, &str)>, param: &str) -> Option<String> {

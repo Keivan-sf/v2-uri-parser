@@ -62,6 +62,15 @@ pub struct KCPSettings {
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
+pub struct XHTTPSettings {
+    pub host: Option<String>,
+    pub path: Option<String>,
+    pub mode: Option<String>,
+    pub extra: Option<serde_json::Value>,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
 pub struct RealitySettings {
     pub fingerprint: Option<String>,
     pub serverName: Option<String>,
@@ -124,6 +133,7 @@ pub struct StreamSettings {
     pub grpcSettings: Option<GRPCSettings>,
     pub quicSettings: Option<QuicSettings>,
     pub kcpSettings: Option<KCPSettings>,
+    pub xhttpSettings: Option<XHTTPSettings>,
 }
 
 #[allow(non_snake_case)]

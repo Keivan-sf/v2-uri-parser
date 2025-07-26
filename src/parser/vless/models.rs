@@ -19,6 +19,7 @@ pub struct VlessQuery {
     pub slpn: Option<String>,
     pub spx: Option<String>,
     pub alpn: Option<String>,
+    pub extra: Option<String>,
 }
 
 pub struct VlessAddress {
