@@ -10,7 +10,7 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
         streamSettings: StreamSettings {
             network: data.query.r#type.clone(),
             security: data.query.security.clone(),
-            tlsSettings: if network_type == String::from("tls") {
+            tlsSettings: if data.query.security == Some(String::from("tls")) {
                 Some(TlsSettings {
                     alpn: data.query.alpn.map(|alpn| vec![alpn]),
                     rejectUnknownSni: None,
