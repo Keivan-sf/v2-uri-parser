@@ -21,9 +21,15 @@ pub struct VlessOutboundSettings {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct VmessOutboundSettings {
+    pub vnext: Vec<VlessServerObject>,
+}
+
+#[derive(Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum OutboundSettings {
     Vless(VlessOutboundSettings),
+    Vmess(VmessOutboundSettings),
 }
 
 #[derive(Serialize, Deserialize)]

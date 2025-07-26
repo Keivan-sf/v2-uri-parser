@@ -7,6 +7,7 @@ use crate::utils::{inbound_generator, parse_raw_json};
 
 mod uri_identifier;
 mod vless;
+mod vmess;
 
 pub fn create_json_config(uri: &str, socks_port: Option<u16>, http_port: Option<u16>) -> String {
     let config = create_config(uri, socks_port, http_port);
@@ -39,6 +40,11 @@ pub fn create_outbound_object(uri: &str) -> config_models::Outbound {
             let d = vless::data::get_data(uri);
             let s = vless::create_outbound_settings(&d);
             (String::from("vless"), d, s)
+        }
+        Some(uri_identifier::Protocols::Vmess) => {
+            let d = vmess::data::get_data(uri);
+            let s = vmess::create_outbound_settings(&d);
+            (String::from("vmess"), d, s)
         }
         Some(_) => {
             panic!("The protocol was recognized but is not supported yet");
