@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 pub struct VlessUser {
     pub id: String,
     pub encryption: String,
-    pub flow: String,
-    pub level: u8,
+    pub flow: Option<String>,
+    pub level: Option<u8>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -28,37 +28,38 @@ pub enum OutboundSettings {
 
 #[derive(Serialize, Deserialize)]
 pub struct NonHeaderObject {
-    pub r#type: String,
+    pub r#type: Option<String>,
 }
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct QuicSettings {
     pub header: Option<NonHeaderObject>,
-    pub security: String,
-    pub key: String,
+    pub security: Option<String>,
+    pub key: Option<String>,
 }
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct GRPCSettings {
-    pub multiMode: bool,
-    pub serviceName: String,
+    pub authority: Option<String>,
+    pub multiMode: Option<bool>,
+    pub serviceName: Option<String>,
 }
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct RealitySettings {
-    pub fingerprint: String,
-    pub serverName: String,
-    pub publicKey: String,
-    pub shortId: String,
-    pub spiderX: String,
+    pub fingerprint: Option<String>,
+    pub serverName: Option<String>,
+    pub publicKey: Option<String>,
+    pub shortId: Option<String>,
+    pub spiderX: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct TCPHeader {
-    pub r#type: String,
+    pub r#type: Option<String>,
 }
 
 #[allow(non_snake_case)]
@@ -101,8 +102,8 @@ pub struct TlsSettings {
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct StreamSettings {
-    pub network: String,
-    pub security: String,
+    pub network: Option<String>,
+    pub security: Option<String>,
     pub tlsSettings: Option<TlsSettings>,
     pub wsSettings: Option<WsSettings>,
     pub tcpSettings: Option<TCPSettings>,
