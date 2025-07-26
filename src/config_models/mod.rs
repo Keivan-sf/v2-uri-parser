@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 pub struct VlessUser {
     pub id: String,
     pub encryption: String,
-    pub flow: String,
-    pub level: u8,
+    pub flow: Option<String>,
+    pub level: Option<u8>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -28,38 +28,66 @@ pub enum OutboundSettings {
 
 #[derive(Serialize, Deserialize)]
 pub struct NonHeaderObject {
-    pub r#type: String,
+    pub r#type: Option<String>,
 }
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct QuicSettings {
     pub header: Option<NonHeaderObject>,
-    pub security: String,
-    pub key: String,
+    pub security: Option<String>,
+    pub key: Option<String>,
 }
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct GRPCSettings {
-    pub multiMode: bool,
-    pub serviceName: String,
+    pub authority: Option<String>,
+    pub multiMode: Option<bool>,
+    pub serviceName: Option<String>,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
+pub struct KCPSettings {
+    pub mtu: Option<u32>,
+    pub tti: Option<u32>,
+    pub uplinkCapacity: Option<u32>,
+    pub downlinkCapacity: Option<u32>,
+    pub congestion: Option<bool>,
+    pub readBufferSize: Option<u32>,
+    pub writeBufferSize: Option<u32>,
+    pub seed: Option<String>,
+}
+
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
+pub struct XHTTPSettings {
+    pub host: Option<String>,
+    pub path: Option<String>,
+    pub mode: Option<String>,
+    pub extra: Option<serde_json::Value>,
 }
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct RealitySettings {
-    pub fingerprint: String,
-    pub serverName: String,
-    pub publicKey: String,
-    pub shortId: String,
-    pub spiderX: String,
+    pub fingerprint: Option<String>,
+    pub serverName: Option<String>,
+    pub publicKey: Option<String>,
+    pub shortId: Option<String>,
+    pub spiderX: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct TCPHeader {
+    pub r#type: Option<String>,
 }
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct TCPSettings {
-    pub header: Option<NonHeaderObject>,
+    pub header: Option<TCPHeader>,
     pub acceptProxyProtocol: Option<bool>,
 }
 
@@ -73,13 +101,14 @@ pub struct HeaderSetting {
 #[derive(Serialize, Deserialize)]
 pub struct WsSettings {
     pub path: Option<String>,
-    pub headers: Option<HeaderSetting>,
+    pub Host: Option<String>,
     pub acceptProxyProtocol: Option<bool>,
 }
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct TlsSettings {
+    pub alpn: Option<Vec<String>>,
     pub allowInsecure: Option<bool>,
     pub serverName: Option<String>,
     pub enableSessionResumption: Option<bool>,
@@ -95,14 +124,16 @@ pub struct TlsSettings {
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 pub struct StreamSettings {
-    pub network: String,
-    pub security: String,
+    pub network: Option<String>,
+    pub security: Option<String>,
     pub tlsSettings: Option<TlsSettings>,
     pub wsSettings: Option<WsSettings>,
     pub tcpSettings: Option<TCPSettings>,
     pub realitySettings: Option<RealitySettings>,
     pub grpcSettings: Option<GRPCSettings>,
     pub quicSettings: Option<QuicSettings>,
+    pub kcpSettings: Option<KCPSettings>,
+    pub xhttpSettings: Option<XHTTPSettings>,
 }
 
 #[allow(non_snake_case)]
