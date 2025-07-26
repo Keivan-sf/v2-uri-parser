@@ -48,7 +48,11 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
             tcpSettings: if data.query.r#type == String::from("tcp") {
                 Some(TCPSettings {
                     header: Some(TCPHeader {
-                        r#type: data.query.header_type.clone(),
+                        r#type: if data.query.header_type.len() > 1 {
+                            data.query.header_type
+                        } else {
+                            String::from("none")
+                        },
                     }),
                     acceptProxyProtocol: None,
                 })
