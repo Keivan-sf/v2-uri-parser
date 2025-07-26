@@ -5,17 +5,22 @@ use std::process::exit;
 mod uri_identifier;
 mod vless;
 
-pub fn create_json_config(uri: &str, socks_port: Option<u16>) -> String {
-    let config = create_config(uri, socks_port);
+pub fn create_json_config(uri: &str, socks_port: Option<u16>, http_port: Option<u16>) -> String {
+    let config = create_config(uri, socks_port, http_port);
     let serialized = serde_json::to_string(&config).unwrap();
     return serialized;
 }
 
-pub fn create_config(uri: &str, socks_port: Option<u16>) -> config_models::Config {
+pub fn create_config(
+    uri: &str,
+    socks_port: Option<u16>,
+    http_port: Option<u16>,
+) -> config_models::Config {
     let outbound_object = create_outbound_object(uri);
     let inbound_config =
         inbound_generator::generate_inbound_config(inbound_generator::InboundGenerationOptions {
             socks_port,
+            http_port,
         });
     let config = config_models::Config {
         outbounds: vec![outbound_object],

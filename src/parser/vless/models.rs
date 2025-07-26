@@ -1,3 +1,4 @@
+#[allow(non_snake_case)]
 pub struct VlessQuery {
     pub security: Option<String>,
     pub sni: Option<String>,
@@ -20,6 +21,7 @@ pub struct VlessQuery {
     pub spx: Option<String>,
     pub alpn: Option<String>,
     pub extra: Option<String>,
+    pub allowInsecure: Option<String>,
 }
 
 pub struct VlessAddress {

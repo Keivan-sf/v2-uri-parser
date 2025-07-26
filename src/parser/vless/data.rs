@@ -60,6 +60,7 @@ fn parse_vless_query(raw_query: &str) -> models::VlessQuery {
         slpn: get_parameter_value(&query, "slpn"),
         spx: url_decode(get_parameter_value(&query, "spx")),
         extra: url_decode(get_parameter_value(&query, "extra")),
+        allowInsecure: get_parameter_value(&query, "allowInsecure"),
     };
     return a;
 }

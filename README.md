@@ -9,10 +9,11 @@ V2ray URI parser
 Usage: v2parser [OPTIONS] <URI>
 
 Arguments:
-  <URI>  
+  <URI>
 
 Options:
-  -s, --socksport <socksport>  
+      --socksport <socksport>
+      --httpport <httpport>
   -h, --help                   Print help
   -V, --version                Print version
 ```
