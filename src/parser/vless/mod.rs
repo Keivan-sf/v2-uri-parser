@@ -4,6 +4,10 @@ use crate::{config_models::*, utils::parse_raw_json};
 
 pub fn create_outbound_object(data: models::VlessData) -> Outbound {
     let network_type = data.query.r#type.clone().unwrap_or(String::from(""));
+
+    let allow_insecure = data.query.allowInsecure == Some(String::from("true"))
+        || data.query.allowInsecure == Some(String::from("1"));
+
     return Outbound {
         protocol: String::from("vless"),
         tag: String::from("proxy"),
@@ -22,7 +26,7 @@ pub fn create_outbound_object(data: models::VlessData) -> Outbound {
                     preferServerCipherSuites: None,
                     fingerprint: data.query.fp.clone(),
                     serverName: data.query.sni.clone(),
-                    allowInsecure: Some(false),
+                    allowInsecure: allow_insecure,
                 })
             } else {
                 None

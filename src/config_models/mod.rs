@@ -109,7 +109,7 @@ pub struct WsSettings {
 #[derive(Serialize, Deserialize)]
 pub struct TlsSettings {
     pub alpn: Option<Vec<String>>,
-    pub allowInsecure: Option<bool>,
+    pub allowInsecure: bool,
     pub serverName: Option<String>,
     pub enableSessionResumption: Option<bool>,
     pub disableSystemRoot: Option<bool>,
