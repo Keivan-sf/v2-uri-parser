@@ -2,7 +2,7 @@
 
 V2ray URI parser for xray core
 
-Currently supports: `vless`
+Currently supports: `vless`, `vmess`, `shadowsocks`, `trojan` and `socks`
 
 ```
 Parses V2ray URI and generates JSON config for xray
