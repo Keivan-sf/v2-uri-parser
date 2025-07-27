@@ -66,9 +66,8 @@ fn get_str_field(json: &Value, field: &str) -> Option<String> {
     return json.get(field).and_then(|v| v.as_str()).map(String::from);
 }
 
-fn get_raw_data_from_uri(uri: &str) -> RawData {
-    let data = uri.split_once("vmess://").unwrap().1;
-    let query_and_name = uri.split_once("?").unwrap().1;
+fn get_raw_data_from_uri(data: &str) -> RawData {
+    let query_and_name = data.split_once("?").unwrap().1;
 
     let (raw_query, name) = query_and_name
         .split_once("#")
