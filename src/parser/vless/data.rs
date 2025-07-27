@@ -41,6 +41,7 @@ pub fn get_data(uri: &str) -> RawData {
         extra: url_decode(get_parameter_value(&query, "extra")),
         allowInsecure: get_parameter_value(&query, "allowInsecure"),
         server_method: None,
+        username:None,
     };
 }
 

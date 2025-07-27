@@ -10,10 +10,6 @@ pub enum Protocols {
 }
 
 pub fn get_uri_protocol(uri: &str) -> Option<Protocols> {
-    let uri_regex = Regex::new(r"^[a-z]+:\/\/.+$").unwrap();
-    if !uri_regex.is_match(uri) {
-        return None;
-    }
     if uri.starts_with("vmess://") {
         return Some(Protocols::Vmess);
     }
@@ -23,7 +19,7 @@ pub fn get_uri_protocol(uri: &str) -> Option<Protocols> {
     if uri.starts_with("ss://") {
         return Some(Protocols::Shadowsocks);
     }
-    if uri.starts_with("socks://") {
+    if uri.starts_with("socks5://") || uri.starts_with("socks4://") || uri.starts_with("socks://") {
         return Some(Protocols::Socks);
     }
     if uri.starts_with("http://") {

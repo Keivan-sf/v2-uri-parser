@@ -41,6 +41,7 @@ pub fn get_data(uri: &str) -> RawData {
         quic_security: None,
         allowInsecure: None,
         vnext_security: None,
+        username: None,
     };
 }
 
