@@ -56,11 +56,11 @@ fn parse_ss_address(raw_data: &str) -> models::ShadowSocksAddress {
 
     let parsed = address_wo_slash.parse::<Uri>().unwrap();
 
-    let a = general_purpose::STANDARD
+    let method_and_password = general_purpose::STANDARD
         .decode(url_decode_str(&userinfo).unwrap_or(userinfo))
         .expect("User info is not base64");
 
-    let (method, password) = std::str::from_utf8(&a)
+    let (method, password) = std::str::from_utf8(&method_and_password)
         .expect("Base64 did not yield a valid utf-8 string")
         .split_once(":")
         .expect("No `:` found in the decoded base64");

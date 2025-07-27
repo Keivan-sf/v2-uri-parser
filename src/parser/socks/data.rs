@@ -57,7 +57,7 @@ fn parse_socks_address(raw_data: &str) -> models::SocksAddress {
     return match maybe_userinfo {
         Some(userinfo) => {
             let url_decoded = url_decode_str(&userinfo).unwrap_or(userinfo);
-            let a = general_purpose::STANDARD
+            let username_and_password = general_purpose::STANDARD
                 .decode(url_decoded.clone())
                 .map(|a| {
                     String::from(
@@ -66,7 +66,7 @@ fn parse_socks_address(raw_data: &str) -> models::SocksAddress {
                 })
                 .unwrap_or(String::from(url_decoded.clone()));
 
-            let (username, password) = a
+            let (username, password) = username_and_password
                 .split_once(":")
                 .expect("No `:` found in the decoded base64");
 
