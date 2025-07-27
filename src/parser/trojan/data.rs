@@ -13,7 +13,7 @@ pub fn get_data(uri: &str) -> RawData {
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     return RawData {
-        remarks: String::from(name),
+        remarks: url_decode(Some(String::from(name))).unwrap_or(String::from("")),
         uuid: Some(parsed_address.uuid),
         port: Some(parsed_address.port),
         address: Some(parsed_address.address),
@@ -54,7 +54,7 @@ fn parse_trojan_address(raw_data: &str) -> models::TrojanAddress {
 
     let parsed = address_wo_slash.parse::<Uri>().unwrap();
 
-    return models::TrojanAddress{
+    return models::TrojanAddress {
         uuid: url_decode(Some(uuid)).unwrap(),
         address: parsed.host().unwrap().to_string(),
         port: parsed.port().unwrap().as_u16(),

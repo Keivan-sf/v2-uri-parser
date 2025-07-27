@@ -13,7 +13,7 @@ pub fn get_data(uri: &str) -> RawData {
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     return RawData {
-        remarks: String::from(name),
+        remarks: url_decode(Some(String::from(name))).unwrap_or(String::from("")),
         uuid: Some(parsed_address.uuid),
         port: Some(parsed_address.port),
         address: Some(parsed_address.address),
