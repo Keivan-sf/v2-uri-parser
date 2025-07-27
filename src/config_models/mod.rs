@@ -10,7 +10,7 @@ pub struct VnextUser {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct VlessServerObject {
+pub struct VnextServerObject {
     pub address: Option<String>,
     pub port: Option<u16>,
     pub users: Option<Vec<VnextUser>>,
@@ -26,12 +26,12 @@ pub struct TrojanServerObject {
 
 #[derive(Serialize, Deserialize)]
 pub struct VlessOutboundSettings {
-    pub vnext: Vec<VlessServerObject>,
+    pub vnext: Vec<VnextServerObject>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct VmessOutboundSettings {
-    pub vnext: Vec<VlessServerObject>,
+    pub vnext: Vec<VnextServerObject>,
 }
 
 #[derive(Serialize, Deserialize)]
