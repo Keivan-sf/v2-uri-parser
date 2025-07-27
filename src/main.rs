@@ -11,10 +11,16 @@ struct Cli {
     socksport: Option<u16>,
     #[arg(long, value_name = "httpport")]
     httpport: Option<u16>,
+    #[arg(long, action = clap::ArgAction::SetTrue, value_name = "get-name")]
+    get_name: Option<bool>,
 }
 
 fn main() {
     let cli = Cli::parse();
+    if cli.get_name == Some(true) {
+        print!("{}", parser::get_name(&cli.uri));
+        return;
+    }
     let json_config = parser::create_json_config(&cli.uri, cli.socksport, cli.httpport);
     println!("{}", json_config);
 }
