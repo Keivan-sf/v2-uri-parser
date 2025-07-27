@@ -35,6 +35,7 @@ pub fn get_data(uri: &str) -> RawData {
         key: get_parameter_value(&query, "key"),
         mode: url_decode(get_parameter_value(&query, "mode")),
         service_name: url_decode(get_parameter_value(&query, "serviceName")),
+        vnext_security: None,
         slpn: get_parameter_value(&query, "slpn"),
         spx: url_decode(get_parameter_value(&query, "spx")),
         extra: url_decode(get_parameter_value(&query, "extra")),

@@ -12,6 +12,7 @@ pub fn create_outbound_settings(data: &RawData) -> OutboundSettings {
                 flow: data.flow.clone(),
                 encryption: Some(data.encryption.clone().unwrap_or(String::from("none"))),
                 level: Some(0),
+                security: None,
             }]),
         }],
     });

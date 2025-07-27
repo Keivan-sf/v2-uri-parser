@@ -6,6 +6,7 @@ pub struct VlessUser {
     pub encryption: Option<String>,
     pub flow: Option<String>,
     pub level: Option<u8>,
+    pub security: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -186,6 +187,7 @@ pub struct Config {
 #[allow(non_snake_case)]
 pub struct RawData {
     pub security: Option<String>,
+    pub vnext_security: Option<String>,
     pub sni: Option<String>,
     pub fp: Option<String>,
     pub pbk: Option<String>,
