@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-pub struct VlessUser {
+pub struct VnextUser {
     pub id: Option<String>,
     pub encryption: Option<String>,
     pub flow: Option<String>,
@@ -13,7 +13,15 @@ pub struct VlessUser {
 pub struct VlessServerObject {
     pub address: Option<String>,
     pub port: Option<u16>,
-    pub users: Option<Vec<VlessUser>>,
+    pub users: Option<Vec<VnextUser>>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct TrojanServerObject {
+    pub address: Option<String>,
+    pub port: Option<u16>,
+    pub password: Option<String>,
+    pub level: Option<u8>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -27,10 +35,16 @@ pub struct VmessOutboundSettings {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct TrojanOutboundSettings {
+    pub servers: Vec<TrojanServerObject>,
+}
+
+#[derive(Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum OutboundSettings {
     Vless(VlessOutboundSettings),
     Vmess(VmessOutboundSettings),
+    Trojan(TrojanOutboundSettings),
 }
 
 #[derive(Serialize, Deserialize)]

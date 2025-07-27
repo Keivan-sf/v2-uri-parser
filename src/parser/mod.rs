@@ -8,6 +8,7 @@ use crate::utils::{inbound_generator, parse_raw_json};
 mod uri_identifier;
 mod vless;
 mod vmess;
+mod trojan;
 
 pub fn get_name(uri: &str) -> String {
     let (_, data, _) = get_uri_data(uri);
@@ -161,6 +162,11 @@ fn get_uri_data(uri: &str) -> (String, RawData, OutboundSettings) {
             let d = vmess::data::get_data(uri);
             let s = vmess::create_outbound_settings(&d);
             (String::from("vmess"), d, s)
+        }
+        Some(uri_identifier::Protocols::Trojan) => {
+            let d = trojan::data::get_data(uri);
+            let s = trojan::create_outbound_settings(&d);
+            (String::from("trojan"), d, s)
         }
         Some(_) => {
             panic!("The protocol was recognized but is not supported yet");

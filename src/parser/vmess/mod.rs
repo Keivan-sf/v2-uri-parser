@@ -7,7 +7,7 @@ pub fn create_outbound_settings(data: &RawData) -> OutboundSettings {
         vnext: vec![VlessServerObject {
             port: data.port,
             address: data.address.clone(),
-            users: Some(vec![VlessUser {
+            users: Some(vec![VnextUser {
                 id: data.uuid.clone(),
                 flow: data.flow.clone(),
                 encryption: Some(data.encryption.clone().unwrap_or(String::from("none"))),
