@@ -10,6 +10,12 @@ pub struct VnextUser {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct SocksUser {
+    pub user: Option<String>,
+    pub pass: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct VnextServerObject {
     pub address: Option<String>,
     pub port: Option<u16>,
@@ -34,6 +40,14 @@ pub struct ShadowSocksServerObject {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct SocksServerObject {
+    pub address: Option<String>,
+    pub port: Option<u16>,
+    pub level: Option<u8>,
+    pub users: Option<Vec<SocksUser>>,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct VlessOutboundSettings {
     pub vnext: Vec<VnextServerObject>,
 }
@@ -54,12 +68,18 @@ pub struct ShadowSocksOutboundSettings {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct SocksOutboundSettings {
+    pub servers: Vec<SocksServerObject>,
+}
+
+#[derive(Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum OutboundSettings {
     Vless(VlessOutboundSettings),
     Vmess(VmessOutboundSettings),
     Trojan(TrojanOutboundSettings),
     ShadowSocks(ShadowSocksOutboundSettings),
+    Socks(SocksOutboundSettings),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -243,4 +263,5 @@ pub struct RawData {
     pub address: Option<String>,
     pub port: Option<u16>,
     pub server_method: Option<String>,
+    pub username: Option<String>,
 }

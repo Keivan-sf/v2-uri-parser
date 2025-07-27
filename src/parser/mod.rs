@@ -6,6 +6,7 @@ use crate::config_models::{
 use crate::utils::{inbound_generator, parse_raw_json};
 
 mod shadow_socks;
+mod socks;
 mod trojan;
 mod uri_identifier;
 mod vless;
@@ -173,6 +174,11 @@ fn get_uri_data(uri: &str) -> (String, RawData, OutboundSettings) {
             let d = shadow_socks::data::get_data(uri);
             let s = shadow_socks::create_outbound_settings(&d);
             (String::from("shadowsocks"), d, s)
+        }
+        Some(uri_identifier::Protocols::Socks) => {
+            let d = socks::data::get_data(uri);
+            let s = socks::create_outbound_settings(&d);
+            (String::from("socks"), d, s)
         }
         Some(_) => {
             panic!("The protocol was recognized but is not supported yet");

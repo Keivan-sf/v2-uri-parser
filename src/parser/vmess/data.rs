@@ -58,6 +58,7 @@ fn get_raw_data_from_base64(decoded_base64: &Vec<u8>) -> RawData {
         // this probably does not exist in vmess uri
         allowInsecure: None,
         server_method: None,
+        username: None,
     };
 }
 
@@ -104,6 +105,7 @@ fn get_raw_data_from_uri(uri: &str) -> RawData {
         extra: url_decode(get_parameter_value(&query, "extra")),
         allowInsecure: get_parameter_value(&query, "allowInsecure"),
         server_method: None,
+        username: None,
     };
 }
 
