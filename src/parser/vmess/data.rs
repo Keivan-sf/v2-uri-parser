@@ -1,6 +1,6 @@
 use crate::config_models::RawData;
 use crate::parser::vmess::models::{self, VmessAddress};
-use crate::utils::{get_parameter_value, url_decode};
+use crate::utils::{get_parameter_value, url_decode, url_decode_str};
 use base64::{engine::general_purpose, Engine};
 use http::Uri;
 use serde_json::Value;
@@ -8,7 +8,9 @@ use serde_json::Value;
 pub fn get_data(uri: &str) -> RawData {
     let data = uri.split_once("vmess://").unwrap().1;
 
-    return match general_purpose::STANDARD.decode(data) {
+    return match general_purpose::STANDARD
+        .decode(url_decode_str(data).unwrap_or(String::from(data)))
+    {
         Ok(decoded) => get_raw_data_from_base64(&decoded),
         Err(_) => get_raw_data_from_uri(data),
     };
