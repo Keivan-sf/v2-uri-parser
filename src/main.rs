@@ -1,26 +1,50 @@
-mod parser;
-use clap::Parser;
+use clap::{value_parser, Arg, Command};
 pub mod config_models;
+mod parser;
 pub mod utils;
 
-#[derive(Parser)]
-#[command(author ,version = "0.1.1", about = "V2ray URI parser", long_about = None)]
-struct Cli {
-    uri: String,
-    #[arg(long, value_name = "socksport")]
-    socksport: Option<u16>,
-    #[arg(long, value_name = "httpport")]
-    httpport: Option<u16>,
-    #[arg(long, action = clap::ArgAction::SetTrue, value_name = "get-name")]
-    get_name: Option<bool>,
-}
-
 fn main() {
-    let cli = Cli::parse();
-    if cli.get_name == Some(true) {
-        print!("{}", parser::get_name(&cli.uri));
+    let matches = Command::new("v2ray-uri-parser")
+        .version("0.1.1")
+        .about("Parses V2ray URI and generates JSON config for xray")
+        .arg(
+            Arg::new("uri")
+                .help("V2ray URI to parse")
+                .required(true)
+                .index(1),
+        )
+        .arg(
+            Arg::new("socksport")
+                .long("socksport")
+                .help("Optional SOCKS proxy port for inbound")
+                .value_name("PORT")
+                .value_parser(value_parser!(u16)),
+        )
+        .arg(
+            Arg::new("httpport")
+                .long("httpport")
+                .help("Optional HTTP proxy port for inbound")
+                .value_name("PORT")
+                .value_parser(value_parser!(u16)),
+        )
+        .arg(
+            Arg::new("get_name")
+                .long("get-name")
+                .help("Only print the config name")
+                .action(clap::ArgAction::SetTrue),
+        )
+        .get_matches();
+
+    let uri = matches.get_one::<String>("uri").unwrap();
+    let socksport = matches.get_one::<u16>("socksport").copied();
+    let httpport = matches.get_one::<u16>("httpport").copied();
+    let get_name = matches.get_flag("get_name");
+
+    if get_name {
+        print!("{}", parser::get_name(uri));
         return;
     }
-    let json_config = parser::create_json_config(&cli.uri, cli.socksport, cli.httpport);
+
+    let json_config = parser::create_json_config(uri, socksport, httpport);
     println!("{}", json_config);
 }
