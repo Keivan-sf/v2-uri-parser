@@ -6,14 +6,14 @@ use http::Uri;
 pub fn get_data(uri: &str) -> RawData {
     let data = uri.split_once("vless://").unwrap().1;
     let query_and_name = uri.split_once("?").unwrap().1;
-    let raw_query = query_and_name
+    let (raw_query, name) = query_and_name
         .split_once("#")
-        .unwrap_or((query_and_name, ""))
-        .0;
+        .unwrap_or((query_and_name, ""));
     let parsed_address = parse_vless_address(data.split_once("?").unwrap().0);
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     return RawData {
+        remarks: String::from(name),
         uuid: Some(parsed_address.uuid),
         port: Some(parsed_address.port),
         address: Some(parsed_address.address),

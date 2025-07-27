@@ -19,6 +19,7 @@ fn get_raw_data_from_base64(decoded_base64: &Vec<u8>) -> RawData {
     let json = serde_json::from_str::<Value>(json_str).unwrap();
 
     return RawData {
+        remarks: get_str_field(&json, "ps").unwrap_or(String::from("")),
         uuid: get_str_field(&json, "id"),
         port: get_str_field(&json, "port")
             .and_then(|s| Some(s.parse::<u16>().expect("port is not a number"))),
@@ -65,14 +66,14 @@ fn get_raw_data_from_uri(uri: &str) -> RawData {
     let data = uri.split_once("vmess://").unwrap().1;
     let query_and_name = uri.split_once("?").unwrap().1;
 
-    let raw_query = query_and_name
+    let (raw_query, name) = query_and_name
         .split_once("#")
-        .unwrap_or((query_and_name, ""))
-        .0;
+        .unwrap_or((query_and_name, ""));
     let parsed_address = parse_vmess_address(data.split_once("?").unwrap().0);
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     return RawData {
+        remarks: String::from(name),
         uuid: Some(parsed_address.uuid),
         port: Some(parsed_address.port),
         address: Some(parsed_address.address),

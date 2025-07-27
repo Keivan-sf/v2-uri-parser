@@ -186,6 +186,7 @@ pub struct Config {
 #[derive(Serialize, Deserialize)]
 #[allow(non_snake_case)]
 pub struct RawData {
+    pub remarks: String,
     pub security: Option<String>,
     pub vnext_security: Option<String>,
     pub sni: Option<String>,

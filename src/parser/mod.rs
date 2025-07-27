@@ -9,6 +9,11 @@ mod uri_identifier;
 mod vless;
 mod vmess;
 
+pub fn get_name(uri: &str) -> String {
+    let (_, data, _) = get_uri_data(uri);
+    return data.remarks;
+}
+
 pub fn create_json_config(uri: &str, socks_port: Option<u16>, http_port: Option<u16>) -> String {
     let config = create_config(uri, socks_port, http_port);
     let serialized = serde_json::to_string(&config).unwrap();
@@ -34,25 +39,7 @@ pub fn create_config(
 }
 
 pub fn create_outbound_object(uri: &str) -> config_models::Outbound {
-    let protocol = uri_identifier::get_uri_protocol(uri);
-    let (name, data, outbound_settings): (String, RawData, OutboundSettings) = match protocol {
-        Some(uri_identifier::Protocols::Vless) => {
-            let d = vless::data::get_data(uri);
-            let s = vless::create_outbound_settings(&d);
-            (String::from("vless"), d, s)
-        }
-        Some(uri_identifier::Protocols::Vmess) => {
-            let d = vmess::data::get_data(uri);
-            let s = vmess::create_outbound_settings(&d);
-            (String::from("vmess"), d, s)
-        }
-        Some(_) => {
-            panic!("The protocol was recognized but is not supported yet");
-        }
-        None => {
-            panic!("The protocol is not supported");
-        }
-    };
+    let (name, data, outbound_settings) = get_uri_data(uri);
 
     let network_type = data.r#type.clone().unwrap_or(String::from(""));
     let allow_insecure = data.allowInsecure == Some(String::from("true"))
@@ -160,4 +147,26 @@ pub fn create_outbound_object(uri: &str) -> config_models::Outbound {
     };
 
     return outbound;
+}
+
+fn get_uri_data(uri: &str) -> (String, RawData, OutboundSettings) {
+    let protocol = uri_identifier::get_uri_protocol(uri);
+    return match protocol {
+        Some(uri_identifier::Protocols::Vless) => {
+            let d = vless::data::get_data(uri);
+            let s = vless::create_outbound_settings(&d);
+            (String::from("vless"), d, s)
+        }
+        Some(uri_identifier::Protocols::Vmess) => {
+            let d = vmess::data::get_data(uri);
+            let s = vmess::create_outbound_settings(&d);
+            (String::from("vmess"), d, s)
+        }
+        Some(_) => {
+            panic!("The protocol was recognized but is not supported yet");
+        }
+        None => {
+            panic!("The protocol is not supported");
+        }
+    };
 }

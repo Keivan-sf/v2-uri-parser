@@ -4,16 +4,17 @@ V2ray URI parser for xray core
 Currently supports: `vless`
 
 ```
-V2ray URI parser
+Parses V2ray URI and generates JSON config for xray
 
-Usage: v2parser [OPTIONS] <URI>
+Usage: v2parser [OPTIONS] <uri>
 
 Arguments:
-  <URI>
+  <uri>  V2ray URI to parse
 
 Options:
-      --socksport <socksport>
-      --httpport <httpport>
-  -h, --help                   Print help
-  -V, --version                Print version
+      --socksport <PORT>  Optional SOCKS proxy port for inbound
+      --httpport <PORT>   Optional HTTP proxy port for inbound
+      --get-name          Only print the config name
+  -h, --help              Print help
+  -V, --version           Print version
 ```
