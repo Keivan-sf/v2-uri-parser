@@ -1,5 +1,5 @@
 [package]
-name = "v2-uri-parser"
+name = "v2parser"
 version = "0.2.0"
 edition = "2021"
 
