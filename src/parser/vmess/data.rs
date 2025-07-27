@@ -19,7 +19,7 @@ fn get_raw_data_from_base64(decoded_base64: &Vec<u8>) -> RawData {
     let json = serde_json::from_str::<Value>(json_str).unwrap();
 
     return RawData {
-        remarks: get_str_field(&json, "ps").unwrap_or(String::from("")),
+        remarks: url_decode(get_str_field(&json, "ps")).unwrap_or(String::from("")),
         uuid: get_str_field(&json, "id"),
         port: get_str_field(&json, "port")
             .and_then(|s| Some(s.parse::<u16>().expect("port is not a number"))),

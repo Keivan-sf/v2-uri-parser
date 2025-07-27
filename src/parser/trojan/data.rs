@@ -1,15 +1,15 @@
 use crate::config_models::RawData;
-use crate::parser::vless::models;
+use crate::parser::trojan::models;
 use crate::utils::{get_parameter_value, url_decode};
 use http::Uri;
 
 pub fn get_data(uri: &str) -> RawData {
-    let data = uri.split_once("vless://").unwrap().1;
+    let data = uri.split_once("trojan://").unwrap().1;
     let query_and_name = uri.split_once("?").unwrap().1;
     let (raw_query, name) = query_and_name
         .split_once("#")
         .unwrap_or((query_and_name, ""));
-    let parsed_address = parse_vless_address(data.split_once("?").unwrap().0);
+    let parsed_address = parse_trojan_address(data.split_once("?").unwrap().0);
     let query: Vec<(&str, &str)> = querystring::querify(raw_query);
 
     return RawData {
@@ -43,10 +43,10 @@ pub fn get_data(uri: &str) -> RawData {
     };
 }
 
-fn parse_vless_address(raw_data: &str) -> models::VlessAddress {
+fn parse_trojan_address(raw_data: &str) -> models::TrojanAddress {
     let (uuid, raw_address): (String, &str) = match raw_data.split_once("@") {
         None => {
-            panic!("Wrong vless format, no `@` found in the address");
+            panic!("Wrong trojan format, no `@` found in the address");
         }
         Some(data) => (String::from(data.0), data.1),
     };
@@ -54,7 +54,7 @@ fn parse_vless_address(raw_data: &str) -> models::VlessAddress {
 
     let parsed = address_wo_slash.parse::<Uri>().unwrap();
 
-    return models::VlessAddress {
+    return models::TrojanAddress {
         uuid: url_decode(Some(uuid)).unwrap(),
         address: parsed.host().unwrap().to_string(),
         port: parsed.port().unwrap().as_u16(),

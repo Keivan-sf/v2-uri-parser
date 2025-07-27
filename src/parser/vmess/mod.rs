@@ -4,10 +4,10 @@ use crate::{config_models::*, utils::parse_raw_json};
 
 pub fn create_outbound_settings(data: &RawData) -> OutboundSettings {
     return OutboundSettings::Vmess(VmessOutboundSettings {
-        vnext: vec![VlessServerObject {
+        vnext: vec![VnextServerObject {
             port: data.port,
             address: data.address.clone(),
-            users: Some(vec![VlessUser {
+            users: Some(vec![VnextUser {
                 id: data.uuid.clone(),
                 flow: data.flow.clone(),
                 encryption: Some(data.encryption.clone().unwrap_or(String::from("none"))),
