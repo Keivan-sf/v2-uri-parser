@@ -16,7 +16,7 @@ fn main() {
         .arg(
             Arg::new("socksport")
                 .long("socksport")
-                .help("Optional SOCKS proxy port for inbound")
+                .help("Optional SOCKS5 proxy port for inbound")
                 .value_name("PORT")
                 .value_parser(value_parser!(u16)),
         )

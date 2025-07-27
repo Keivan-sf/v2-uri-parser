@@ -1,4 +1,5 @@
 # v2-uri-parser
+
 V2ray URI parser for xray core
 
 Currently supports: `vless`
@@ -12,7 +13,7 @@ Arguments:
   <uri>  V2ray URI to parse
 
 Options:
-      --socksport <PORT>  Optional SOCKS proxy port for inbound
+      --socksport <PORT>  Optional SOCKS5 proxy port for inbound
       --httpport <PORT>   Optional HTTP proxy port for inbound
       --get-name          Only print the config name
   -h, --help              Print help
