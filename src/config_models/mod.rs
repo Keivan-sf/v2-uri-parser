@@ -2,17 +2,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct VlessUser {
-    pub id: String,
-    pub encryption: String,
+    pub id: Option<String>,
+    pub encryption: Option<String>,
     pub flow: Option<String>,
     pub level: Option<u8>,
+    pub security: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct VlessServerObject {
-    pub address: String,
-    pub port: u16,
-    pub users: Vec<VlessUser>,
+    pub address: Option<String>,
+    pub port: Option<u16>,
+    pub users: Option<Vec<VlessUser>>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -21,9 +22,15 @@ pub struct VlessOutboundSettings {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct VmessOutboundSettings {
+    pub vnext: Vec<VlessServerObject>,
+}
+
+#[derive(Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum OutboundSettings {
     Vless(VlessOutboundSettings),
+    Vmess(VmessOutboundSettings),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -174,4 +181,35 @@ pub struct Inbound {
 pub struct Config {
     pub outbounds: Vec<Outbound>,
     pub inbounds: Vec<Inbound>,
+}
+
+#[derive(Serialize, Deserialize)]
+#[allow(non_snake_case)]
+pub struct RawData {
+    pub security: Option<String>,
+    pub vnext_security: Option<String>,
+    pub sni: Option<String>,
+    pub fp: Option<String>,
+    pub pbk: Option<String>,
+    pub sid: Option<String>,
+    pub r#type: Option<String>,
+    pub flow: Option<String>,
+    pub path: Option<String>,
+    pub encryption: Option<String>,
+    pub header_type: Option<String>,
+    pub host: Option<String>,
+    pub seed: Option<String>,
+    pub quic_security: Option<String>,
+    pub r#key: Option<String>,
+    pub mode: Option<String>,
+    pub service_name: Option<String>,
+    pub authority: Option<String>,
+    pub slpn: Option<String>,
+    pub spx: Option<String>,
+    pub alpn: Option<String>,
+    pub extra: Option<String>,
+    pub allowInsecure: Option<String>,
+    pub uuid: Option<String>,
+    pub address: Option<String>,
+    pub port: Option<u16>,
 }
