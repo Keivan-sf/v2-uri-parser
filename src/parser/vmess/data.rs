@@ -1,5 +1,5 @@
 use crate::config_models::RawData;
-use crate::parser::vmess::models::{self, VmessAddress};
+use crate::parser::vmess::models::VmessAddress;
 use crate::utils::{get_parameter_value, url_decode, url_decode_str};
 use base64::{engine::general_purpose, Engine};
 use http::Uri;
@@ -57,6 +57,7 @@ fn get_raw_data_from_base64(decoded_base64: &Vec<u8>) -> RawData {
         extra: url_decode(get_str_field(&json, "extra")),
         // this probably does not exist in vmess uri
         allowInsecure: None,
+        server_method: None,
     };
 }
 
@@ -102,6 +103,7 @@ fn get_raw_data_from_uri(uri: &str) -> RawData {
         spx: url_decode(get_parameter_value(&query, "spx")),
         extra: url_decode(get_parameter_value(&query, "extra")),
         allowInsecure: get_parameter_value(&query, "allowInsecure"),
+        server_method: None,
     };
 }
 

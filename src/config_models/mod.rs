@@ -25,6 +25,15 @@ pub struct TrojanServerObject {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct ShadowSocksServerObject {
+    pub address: Option<String>,
+    pub port: Option<u16>,
+    pub password: Option<String>,
+    pub level: Option<u8>,
+    pub method: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct VlessOutboundSettings {
     pub vnext: Vec<VnextServerObject>,
 }
@@ -40,11 +49,17 @@ pub struct TrojanOutboundSettings {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct ShadowSocksOutboundSettings {
+    pub servers: Vec<ShadowSocksServerObject>,
+}
+
+#[derive(Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum OutboundSettings {
     Vless(VlessOutboundSettings),
     Vmess(VmessOutboundSettings),
     Trojan(TrojanOutboundSettings),
+    ShadowSocks(ShadowSocksOutboundSettings),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -227,4 +242,5 @@ pub struct RawData {
     pub uuid: Option<String>,
     pub address: Option<String>,
     pub port: Option<u16>,
+    pub server_method: Option<String>,
 }
