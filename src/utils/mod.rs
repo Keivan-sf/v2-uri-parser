@@ -1,5 +1,11 @@
 pub mod inbound_generator;
 
+pub fn url_decode_str(value: &str) -> Option<String> {
+    return urlencoding::decode(value)
+        .ok()
+        .map(|decoded| decoded.into_owned());
+}
+
 pub fn url_decode(value: Option<String>) -> Option<String> {
     return value.and_then(|s| {
         urlencoding::decode(&s)
