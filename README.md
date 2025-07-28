@@ -15,7 +15,7 @@ Arguments:
 Options:
       --socksport <PORT>  Optional SOCKS5 proxy port for inbound
       --httpport <PORT>   Optional HTTP proxy port for inbound
-      --get-name          Only print the config name
+      --get-metadata      Only print config meta data
   -h, --help              Print help
   -V, --version           Print version
 ```
