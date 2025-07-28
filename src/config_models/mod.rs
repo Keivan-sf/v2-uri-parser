@@ -265,3 +265,10 @@ pub struct RawData {
     pub server_method: Option<String>,
     pub username: Option<String>,
 }
+
+#[derive(Serialize, Deserialize)]
+#[allow(non_snake_case)]
+pub struct ConfigMetaData {
+    pub name: String,
+    pub protocol: String,
+}

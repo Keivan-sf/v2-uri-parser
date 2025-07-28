@@ -1,7 +1,7 @@
 use crate::config_models::{
-    self, GRPCSettings, KCPSettings, NonHeaderObject, Outbound, OutboundSettings, QuicSettings,
-    RawData, RealitySettings, StreamSettings, TCPHeader, TCPSettings, TlsSettings, WsSettings,
-    XHTTPSettings,
+    self, ConfigMetaData, GRPCSettings, KCPSettings, NonHeaderObject, Outbound, OutboundSettings,
+    QuicSettings, RawData, RealitySettings, StreamSettings, TCPHeader, TCPSettings, TlsSettings,
+    WsSettings, XHTTPSettings,
 };
 use crate::utils::{inbound_generator, parse_raw_json};
 
@@ -12,9 +12,14 @@ mod uri_identifier;
 mod vless;
 mod vmess;
 
-pub fn get_name(uri: &str) -> String {
-    let (_, data, _) = get_uri_data(uri);
-    return data.remarks;
+pub fn get_metadata(uri: &str) -> String {
+    let (protocol, data, _) = get_uri_data(uri);
+    let meta_data = ConfigMetaData {
+        name: data.remarks,
+        protocol,
+    };
+    let serialized = serde_json::to_string(&meta_data).unwrap();
+    return serialized;
 }
 
 pub fn create_json_config(uri: &str, socks_port: Option<u16>, http_port: Option<u16>) -> String {
