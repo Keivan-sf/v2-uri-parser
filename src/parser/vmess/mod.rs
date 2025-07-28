@@ -1,6 +1,6 @@
 pub mod data;
 mod models;
-use crate::{config_models::*, utils::parse_raw_json};
+use crate::config_models::*;
 
 pub fn create_outbound_settings(data: &RawData) -> OutboundSettings {
     return OutboundSettings::Vmess(VmessOutboundSettings {

@@ -5,7 +5,7 @@ pub mod utils;
 
 fn main() {
     let matches = Command::new("v2parser")
-        .version("0.2.0")
+        .version("0.3.0")
         .about("Parses V2ray URI and generates JSON config for xray")
         .arg(
             Arg::new("uri")
@@ -28,9 +28,9 @@ fn main() {
                 .value_parser(value_parser!(u16)),
         )
         .arg(
-            Arg::new("get_name")
-                .long("get-name")
-                .help("Only print the config name")
+            Arg::new("get_metadata")
+                .long("get-metadata")
+                .help("Only print config meta data")
                 .action(clap::ArgAction::SetTrue),
         )
         .get_matches();
@@ -38,10 +38,10 @@ fn main() {
     let uri = matches.get_one::<String>("uri").unwrap();
     let socksport = matches.get_one::<u16>("socksport").copied();
     let httpport = matches.get_one::<u16>("httpport").copied();
-    let get_name = matches.get_flag("get_name");
+    let get_metadata = matches.get_flag("get_metadata");
 
-    if get_name {
-        print!("{}", parser::get_name(uri));
+    if get_metadata {
+        print!("{}", parser::get_metadata(uri));
         return;
     }
 

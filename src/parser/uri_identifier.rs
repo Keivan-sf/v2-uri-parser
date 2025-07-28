@@ -1,5 +1,3 @@
-use regex::Regex;
-
 pub enum Protocols {
     Vmess,
     Vless,
