@@ -271,4 +271,7 @@ pub struct RawData {
 pub struct ConfigMetaData {
     pub name: String,
     pub protocol: String,
+    pub host: Option<String>,
+    pub address: Option<String>,
+    pub port: Option<u16>,
 }

@@ -16,6 +16,9 @@ pub fn get_metadata(uri: &str) -> String {
     let (protocol, data, _) = get_uri_data(uri);
     let meta_data = ConfigMetaData {
         name: data.remarks,
+        host: data.host.clone(),
+        address: data.address.clone(),
+        port: data.port.clone(),
         protocol,
     };
     let serialized = serde_json::to_string(&meta_data).unwrap();
