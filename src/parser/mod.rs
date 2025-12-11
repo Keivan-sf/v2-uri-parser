@@ -98,7 +98,7 @@ pub fn create_outbound_object(uri: &str) -> config_models::Outbound {
             } else {
                 None
             },
-            realitySettings: if network_type == String::from("reality") {
+            realitySettings: if data.security == Some(String::from("reality")) {
                 Some(RealitySettings {
                     publicKey: data.pbk,
                     serverName: data.sni.clone(),
