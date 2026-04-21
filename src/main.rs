@@ -10,7 +10,6 @@ fn main() {
         .arg(
             Arg::new("uri")
                 .help("V2ray URI to parse")
-                .required(true)
                 .index(1),
         )
         .arg(
@@ -35,16 +34,19 @@ fn main() {
         )
         .get_matches();
 
-    let uri = matches.get_one::<String>("uri").unwrap();
+    let uri = match matches.get_one::<String>("uri") {
+        Some(uri) => Some(uri.to_owned()),
+        None => dialoguer::Input::new().interact_text().ok()
+    }.unwrap();
     let socksport = matches.get_one::<u16>("socksport").copied();
     let httpport = matches.get_one::<u16>("httpport").copied();
     let get_metadata = matches.get_flag("get_metadata");
 
     if get_metadata {
-        print!("{}", parser::get_metadata(uri));
+        print!("{}", parser::get_metadata(uri.as_str()));
         return;
     }
 
-    let json_config = parser::create_json_config(uri, socksport, httpport);
+    let json_config = parser::create_json_config(uri.as_str(), socksport, httpport);
     println!("{}", json_config);
 }
