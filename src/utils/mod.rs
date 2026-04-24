@@ -24,8 +24,14 @@ pub fn parse_raw_json(input: &str) -> Option<serde_json::Value> {
 }
 
 pub fn get_parameter_value(query: &Vec<(&str, &str)>, param: &str) -> Option<String> {
-    return query
+    let param = query
         .iter()
         .find(|q| String::from(q.0) == String::from(param))
         .map(|q| q.1.to_string());
+    
+    match param {
+        Some(param) if param.is_empty() => None,
+        Some(param) if !param.is_empty() => Some(param),
+        _ => None,
+    }
 }
