@@ -1,13 +1,14 @@
 use crate::config_models::{
     self, ConfigMetaData, GRPCSettings, KCPSettings, NonHeaderObject, Outbound, OutboundSettings,
     QuicSettings, RawData, RealitySettings, StreamSettings, TCPHeader, TCPSettings, TlsSettings,
-    WsSettings, XHTTPSettings,
+    WsSettings, XHTTPSettings, HysteriaSettings
 };
 use crate::utils::{inbound_generator, parse_raw_json};
 
 mod shadow_socks;
 mod socks;
 mod trojan;
+mod hysteria;
 mod uri_identifier;
 mod vless;
 mod vmess;
@@ -57,7 +58,7 @@ pub fn create_outbound_object(uri: &str) -> config_models::Outbound {
         || data.allowInsecure == Some(String::from("1"));
 
     let outbound = Outbound {
-        protocol: name,
+        protocol: name.clone(),
         tag: String::from("proxy"),
         streamSettings: StreamSettings {
             network: data.r#type.clone(),
@@ -75,6 +76,14 @@ pub fn create_outbound_object(uri: &str) -> config_models::Outbound {
                     fingerprint: data.fp.clone(),
                     serverName: data.sni.clone(),
                     allowInsecure: allow_insecure,
+                })
+            } else {
+                None
+            },
+            hysteriaSettings: if name == String::from("hysteria") {
+                Some(HysteriaSettings {
+                    version: Some(2),
+                    auth: data.uuid.clone(),
                 })
             } else {
                 None
@@ -177,6 +186,11 @@ fn get_uri_data(uri: &str) -> (String, RawData, OutboundSettings) {
             let d = trojan::data::get_data(uri);
             let s = trojan::create_outbound_settings(&d);
             (String::from("trojan"), d, s)
+        }
+        Some(uri_identifier::Protocols::Hysteria) => {
+            let d = hysteria::data::get_data(uri);
+            let s = hysteria::create_outbound_settings(&d);
+            (String::from("hysteria"), d, s)
         }
         Some(uri_identifier::Protocols::Shadowsocks) => {
             let d = shadow_socks::data::get_data(uri);

@@ -3,6 +3,7 @@ pub enum Protocols {
     Vless,
     Shadowsocks,
     Trojan,
+    Hysteria,
     Socks,
     Http,
 }
@@ -25,6 +26,9 @@ pub fn get_uri_protocol(uri: &str) -> Option<Protocols> {
     }
     if uri.starts_with("trojan://") {
         return Some(Protocols::Trojan);
+    }
+    if uri.starts_with("hysteria2://") || uri.starts_with("hy2://") {
+        return Some(Protocols::Hysteria);
     }
     return None;
 }
@@ -56,5 +60,10 @@ mod tests {
     fn recognize_trojan_protocol() {
         let protocol = get_uri_protocol("trojan://test-pw@13.50.100.84:22222?security=tls&sni=trj.rollingnext.co.uk&type=tcp#test").unwrap();
         assert!(matches!(protocol, Protocols::Trojan));
+    }
+    #[test]
+    fn recognize_hysteria_protocol() {
+        let protocol = get_uri_protocol("hysteria2://test-pw@13.50.100.84:22222?security=tls&sni=trj.rollingnext.co.uk&type=tcp#test").unwrap();
+        assert!(matches!(protocol, Protocols::Hysteria));
     }
 }

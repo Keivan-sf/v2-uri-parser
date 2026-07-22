@@ -63,6 +63,13 @@ pub struct TrojanOutboundSettings {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct HysteriaOutboundSettings {
+    pub address: Option<String>,
+    pub port: Option<u16>,
+    pub version: Option<u8>,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct ShadowSocksOutboundSettings {
     pub servers: Vec<ShadowSocksServerObject>,
 }
@@ -78,6 +85,7 @@ pub enum OutboundSettings {
     Vless(VlessOutboundSettings),
     Vmess(VmessOutboundSettings),
     Trojan(TrojanOutboundSettings),
+    Hysteria(HysteriaOutboundSettings),
     ShadowSocks(ShadowSocksOutboundSettings),
     Socks(SocksOutboundSettings),
 }
@@ -135,6 +143,13 @@ pub struct RealitySettings {
     pub spiderX: Option<String>,
 }
 
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize)]
+pub struct HysteriaSettings {
+    pub version: Option<u8>,
+    pub auth: Option<String>,
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct TCPHeader {
     pub r#type: Option<String>,
@@ -186,6 +201,7 @@ pub struct StreamSettings {
     pub wsSettings: Option<WsSettings>,
     pub tcpSettings: Option<TCPSettings>,
     pub realitySettings: Option<RealitySettings>,
+    pub hysteriaSettings: Option<HysteriaSettings>,
     pub grpcSettings: Option<GRPCSettings>,
     pub quicSettings: Option<QuicSettings>,
     pub kcpSettings: Option<KCPSettings>,
