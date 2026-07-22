@@ -5,7 +5,7 @@ pub mod utils;
 
 fn main() {
     let matches = Command::new("v2parser")
-        .version("0.3.1")
+        .version("0.3.3")
         .about("Parses V2ray URI and generates JSON config for xray")
         .arg(
             Arg::new("uri")
