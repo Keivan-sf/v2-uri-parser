@@ -7,11 +7,7 @@ fn main() {
     let matches = Command::new("v2parser")
         .version("0.3.3")
         .about("Parses V2ray URI and generates JSON config for xray")
-        .arg(
-            Arg::new("uri")
-                .help("V2ray URI to parse")
-                .index(1),
-        )
+        .arg(Arg::new("uri").help("V2ray URI to parse").index(1))
         .arg(
             Arg::new("socksport")
                 .long("socksport")
@@ -27,6 +23,13 @@ fn main() {
                 .value_parser(value_parser!(u16)),
         )
         .arg(
+            Arg::new("tproxyport")
+                .long("tproxyport")
+                .help("Optional tproxy port for inbound")
+                .value_name("PORT")
+                .value_parser(value_parser!(u16)),
+        )
+        .arg(
             Arg::new("get_metadata")
                 .long("get-metadata")
                 .help("Only print config meta data")
@@ -36,10 +39,12 @@ fn main() {
 
     let uri = match matches.get_one::<String>("uri") {
         Some(uri) => Some(uri.to_owned()),
-        None => dialoguer::Input::new().interact_text().ok()
-    }.unwrap();
+        None => dialoguer::Input::new().interact_text().ok(),
+    }
+    .unwrap();
     let socksport = matches.get_one::<u16>("socksport").copied();
     let httpport = matches.get_one::<u16>("httpport").copied();
+    let tproxyport = matches.get_one::<u16>("tproxyport").copied();
     let get_metadata = matches.get_flag("get_metadata");
 
     if get_metadata {
@@ -47,6 +52,6 @@ fn main() {
         return;
     }
 
-    let json_config = parser::create_json_config(uri.as_str(), socksport, httpport);
+    let json_config = parser::create_json_config(uri.as_str(), socksport, httpport, tproxyport);
     println!("{}", json_config);
 }

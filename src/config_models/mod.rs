@@ -218,8 +218,11 @@ pub struct Outbound {
 }
 
 #[derive(Serialize, Deserialize)]
+#[allow(non_snake_case)]
 pub struct InboundSettings {
-    pub udp: bool,
+    pub udp: Option<bool>,
+    pub allowedNetwork: Option<String>,
+    pub followRedirect: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -233,13 +236,25 @@ pub struct SniffingSettings {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct InboundSockopt {
+    pub tproxy: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct InboundStreamSettings {
+    pub sockopt: Option<InboundSockopt>,
+}
+
+#[derive(Serialize, Deserialize)]
+#[allow(non_snake_case)]
 pub struct Inbound {
-    pub listen: String,
+    pub listen: Option<String>,
     pub port: u16,
     pub protocol: String,
     pub settings: Option<InboundSettings>,
     pub sniffing: Option<SniffingSettings>,
-    pub tag: String,
+    pub streamSettings: Option<InboundStreamSettings>,
+    pub tag: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]

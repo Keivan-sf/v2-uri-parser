@@ -1,14 +1,14 @@
 use crate::config_models::{
-    self, ConfigMetaData, GRPCSettings, KCPSettings, NonHeaderObject, Outbound, OutboundSettings,
-    QuicSettings, RawData, RealitySettings, StreamSettings, TCPHeader, TCPSettings, TlsSettings,
-    WsSettings, XHTTPSettings, HysteriaSettings
+    self, ConfigMetaData, GRPCSettings, HysteriaSettings, KCPSettings, NonHeaderObject, Outbound,
+    OutboundSettings, QuicSettings, RawData, RealitySettings, StreamSettings, TCPHeader,
+    TCPSettings, TlsSettings, WsSettings, XHTTPSettings,
 };
 use crate::utils::{inbound_generator, parse_raw_json};
 
+mod hysteria;
 mod shadow_socks;
 mod socks;
 mod trojan;
-mod hysteria;
 mod uri_identifier;
 mod vless;
 mod vmess;
@@ -26,8 +26,13 @@ pub fn get_metadata(uri: &str) -> String {
     return serialized;
 }
 
-pub fn create_json_config(uri: &str, socks_port: Option<u16>, http_port: Option<u16>) -> String {
-    let config = create_config(uri, socks_port, http_port);
+pub fn create_json_config(
+    uri: &str,
+    socks_port: Option<u16>,
+    http_port: Option<u16>,
+    tproxy_port: Option<u16>,
+) -> String {
+    let config = create_config(uri, socks_port, http_port, tproxy_port);
     let serialized = serde_json::to_string(&config).unwrap();
     return serialized;
 }
@@ -36,12 +41,14 @@ pub fn create_config(
     uri: &str,
     socks_port: Option<u16>,
     http_port: Option<u16>,
+    tproxy_port: Option<u16>,
 ) -> config_models::Config {
     let outbound_object = create_outbound_object(uri);
     let inbound_config =
         inbound_generator::generate_inbound_config(inbound_generator::InboundGenerationOptions {
             socks_port,
             http_port,
+            tproxy_port,
         });
     let config = config_models::Config {
         outbounds: vec![outbound_object],
