@@ -7,15 +7,16 @@ Currently supports: `vless`, `vmess`, `shadowsocks`, `trojan`, `hysteria v2` and
 ```
 Parses V2ray URI and generates JSON config for xray
 
-Usage: v2parser [OPTIONS] <uri>
+Usage: v2parser [OPTIONS] [uri]
 
 Arguments:
-  <uri>  V2ray URI to parse
+  [uri]  V2ray URI to parse
 
 Options:
-      --socksport <PORT>  Optional SOCKS5 proxy port for inbound
-      --httpport <PORT>   Optional HTTP proxy port for inbound
-      --get-metadata      Only print config meta data
-  -h, --help              Print help
-  -V, --version           Print version
+      --socksport <PORT>   Optional SOCKS5 proxy port for inbound
+      --httpport <PORT>    Optional HTTP proxy port for inbound
+      --tproxyport <PORT>  Optional tproxy port for inbound
+      --get-metadata       Only print config meta data
+  -h, --help               Print help
+  -V, --version            Print version
 ```
