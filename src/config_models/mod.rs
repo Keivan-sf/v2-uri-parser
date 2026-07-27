@@ -222,6 +222,7 @@ pub struct Outbound {
 pub struct InboundSettings {
     pub udp: Option<bool>,
     pub allowedNetwork: Option<String>,
+    pub network: Option<String>,
     pub followRedirect: Option<bool>,
 }
 

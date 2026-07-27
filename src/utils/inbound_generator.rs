@@ -63,6 +63,7 @@ pub fn generate_socks_inbound(socks_port: u16) -> config_models::Inbound {
         settings: Some(config_models::InboundSettings {
             udp: Some(true),
             allowedNetwork: None,
+            network: None,
             followRedirect: None,
         }),
         streamSettings: None,
@@ -89,6 +90,7 @@ pub fn generate_tproxy_inbound(tproxy_port: u16) -> config_models::Inbound {
         settings: Some(config_models::InboundSettings {
             udp: None,
             allowedNetwork: Some(String::from("tcp,udp")),
+            network: Some(String::from("tcp,udp")),
             followRedirect: Some(true),
         }),
         streamSettings: Some(config_models::InboundStreamSettings {
