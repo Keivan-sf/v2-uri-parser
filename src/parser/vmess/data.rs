@@ -23,8 +23,7 @@ fn get_raw_data_from_base64(decoded_base64: &Vec<u8>) -> RawData {
     return RawData {
         remarks: url_decode(get_str_field(&json, "ps")).unwrap_or(String::from("")),
         uuid: get_str_field(&json, "id"),
-        port: get_str_field(&json, "port")
-            .and_then(|s| Some(s.parse::<u16>().expect("port is not a number"))),
+        port: get_port_field(&json, "port"),
         address: get_str_field(&json, "add"),
         alpn: url_decode(get_str_field(&json, "alpn")),
         path: url_decode(get_str_field(&json, "path")),
@@ -64,6 +63,16 @@ fn get_raw_data_from_base64(decoded_base64: &Vec<u8>) -> RawData {
 
 fn get_str_field(json: &Value, field: &str) -> Option<String> {
     return json.get(field).and_then(|v| v.as_str()).map(String::from);
+}
+
+fn get_port_field(json: &Value, field: &str) -> Option<u16> {
+    json.get(field).and_then(|v| {
+        if let Some(s) = v.as_str() {
+            s.parse::<u16>().ok()
+        } else {
+            v.as_u64().and_then(|n| u16::try_from(n).ok())
+        }
+    })
 }
 
 fn get_raw_data_from_uri(data: &str) -> RawData {
